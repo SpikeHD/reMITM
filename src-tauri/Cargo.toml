@@ -22,6 +22,10 @@ dirs = "5.0.1"
 hudsucker = "0.20.0"
 rcgen = "0.11.1"
 rustls-pemfile = "1.0.2"
+once_cell = "1.18.0"
+async-trait = "0.1.68"
+tokio = { version = "1.28.2", features = ["signal"] }
+registry = "1.2.3"
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem and the built-in dev server is disabled.

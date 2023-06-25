@@ -35,6 +35,12 @@ pub fn get_config() -> Config {
   }
 }
 
+pub fn write_config(config: Config) {
+  let path = config_path();
+  let config_json = serde_json::to_string(&config).unwrap();
+  fs::write(path, config_json).unwrap();
+}
+
 pub fn init_config() {
   let path = config_path();
 

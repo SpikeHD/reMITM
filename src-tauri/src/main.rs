@@ -1,13 +1,12 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use std::fs;
-
 use config::init_config;
 
-mod config;
-mod proxy;
 mod certificate;
+mod config;
+mod matcher;
+mod proxy;
 
 /**
  * Ensures config path and file exists
