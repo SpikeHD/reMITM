@@ -26,12 +26,10 @@ export function UriList() {
 
   return (
     <div id="UriList">
-      <button onClick={addUri}>Add URI</button>
       <ul>
-        {uris.map(uri => (
+      {uris.map(uri => (
           <li>
             <span>{uri}</span>
-            <button onClick={() => removeUri(uri)}>Remove</button>
           </li>
         ))}
       </ul>
