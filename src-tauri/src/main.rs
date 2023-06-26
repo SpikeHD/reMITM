@@ -27,9 +27,13 @@ pub fn init() {
 fn main() {
   init();
 
+  proxy::create_proxy();
+
   tauri::Builder::default()
     .invoke_handler(tauri::generate_handler![
       config::get_config,
+      proxy::connect_to_proxy,
+      proxy::disconnect_from_proxy,
     ])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");

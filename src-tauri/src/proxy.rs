@@ -145,6 +145,7 @@ pub async fn create_proxy() {
 }
 
 #[cfg(target_os = "windows")]
+#[tauri::command]
 pub fn connect_to_proxy() {
   // Create the server string
   let config = config::get_config();
@@ -169,6 +170,7 @@ pub fn connect_to_proxy() {
 }
 
 #[cfg(target_os = "linux")]
+#[tauri::command]
 pub fn connect_to_proxy() {
   // Create the server string
   let config = config::get_config();
@@ -194,6 +196,7 @@ pub fn connect_to_proxy() {
 }
 
 #[cfg(target_os = "macos")]
+#[tauri::command]
 pub fn connect_to_proxy() {
   // Create the server string
   let config = config::get_config();
@@ -219,6 +222,7 @@ pub fn connect_to_proxy() {
 }
 
 #[cfg(target_os = "windows")]
+#[tauri::command]
 pub fn disconnect_from_proxy() {
   // Fetch the 'Internet Settings' registry key.
   let settings = Hive::CurrentUser
@@ -235,6 +239,7 @@ pub fn disconnect_from_proxy() {
 }
 
 #[cfg(target_os = "linux")]
+#[tauri::command]
 pub fn disconnect_from_proxy() {
   // Set the proxy via gsettings
   let set_proxy = Command::new("gsettings")
@@ -251,6 +256,7 @@ pub fn disconnect_from_proxy() {
 }
 
 #[cfg(target_os = "macos")]
+#[tauri::command]
 pub fn disconnect_from_proxy() {
   // Set the proxy via networksetup
   let set_proxy = Command::new("networksetup")
