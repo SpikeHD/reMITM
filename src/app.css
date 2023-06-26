@@ -12,6 +12,7 @@ body {
   background-color: var(--bg);
   font-family: 'Raleway', sans-serif;
   font-weight: bold;
+  color: #fff;
 }
 
 #app {
