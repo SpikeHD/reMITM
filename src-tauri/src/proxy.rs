@@ -1,6 +1,7 @@
 use std::{fs, sync::Mutex};
 use std::net::SocketAddr;
 use std::path::{PathBuf};
+use std::process::Command;
 
 use once_cell::sync::Lazy;
 
@@ -174,7 +175,7 @@ pub fn connect_to_proxy() {
 pub fn connect_to_proxy() {
   // Create the server string
   let config = config::get_config();
-  let proxy_port = config.proxy_port;
+  let proxy_port = config.proxy_port.unwrap_or(default_config().proxy_port.unwrap());
   let server = format!("http://127.0.0.1:{};https://127.0.0.1:{}", proxy_port, proxy_port);
 
   // Set the proxy via gsettings
