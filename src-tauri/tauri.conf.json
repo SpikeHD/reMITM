@@ -56,10 +56,10 @@
     "windows": [
       {
         "fullscreen": false,
+        "width": 400,
         "height": 600,
-        "resizable": true,
-        "title": "reMITM",
-        "width": 800
+        "resizable": false,
+        "title": "reMITM"
       }
     ]
   }

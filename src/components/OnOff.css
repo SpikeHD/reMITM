@@ -1,0 +1,25 @@
+#OnOffToggle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#OnOffToggle span {
+  margin: 20px;
+}
+
+#OnOffToggle:hover {
+  cursor: pointer;
+}
+
+#OnOffToggle img {
+  transform: rotate(180deg);
+  width: 50%;
+
+  transition: all 0.1s ease-in-out;
+}
+
+#OnOffToggle img.toggled {
+  transform: rotate(0deg);
+}

@@ -9,6 +9,7 @@ pub struct Config {
   pub proxy_port: u16,
   pub urls_to_redirect: Vec<String>,
   pub redirect_to: String,
+  pub log_requests: bool,
 }
 
 pub fn config_path() -> PathBuf {
@@ -31,6 +32,7 @@ pub fn get_config() -> Config {
       proxy_port: 8111,
       urls_to_redirect: vec![],
       redirect_to: "http://localhost:3000".to_string(),
+      log_requests: false,
     }
   }
 }
@@ -55,6 +57,7 @@ pub fn init_config() {
       proxy_port: 8111,
       urls_to_redirect: vec![],
       redirect_to: "http://localhost:3000".to_string(),
+      log_requests: false,
     };
 
     let config_json = serde_json::to_string(&config).unwrap();
