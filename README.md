@@ -14,12 +14,7 @@
 
 [View an overview here!](https://spikehd.github.io/projects/reMITM)
 
-reMITM was made for one purpose: to redirect requests to other places. While it allows you to log network traffic, this isn't really intended to be a debugger. Rather it's use comes from it's ease of configuration for simply redirecting network traffic to other servers.
-
-## Use cases
-
-* See/dump traffic from websites
-* Redirect traffic from a video game to another server (private servers, for example)
+reMITM was made for one purpose: to redirect requests to other places. While it allows you to log network traffic, this isn't really intended to be a debugger. Rather, it's use comes from it's ease of configuration for simply redirecting network traffic to other places.
 
 # Requirements
 
@@ -27,7 +22,8 @@ reMITM was made for one purpose: to redirect requests to other places. While it 
 * Nothing!
 
 ### Linux
-* `sudo apt install libnss3-tools`
+* Requires `libnss3-tools`
+  * Ubuntu: `sudo apt install libnss3-tools`
 
 ### MacOS
 * Nothing!
@@ -37,5 +33,6 @@ reMITM was made for one purpose: to redirect requests to other places. While it 
 * Settings
   * `Set in Wine`
   * `Launch on startup`
+  * `Proxy Port`
 * Finish UI
-* "Open Terminal" button, opens with proxy env set
+* "Open Terminal" button, opens with proxy env variables set (platform agnostic)
