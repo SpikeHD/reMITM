@@ -12,3 +12,10 @@
 
 ## MacOS
 * Nothing!
+
+# TODO
+* Maybe use `libproxy`?
+* Settings
+  * `Set in Wine`
+  * `Launch on startup`
+* Finish UI
