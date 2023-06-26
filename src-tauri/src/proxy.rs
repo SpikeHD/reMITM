@@ -217,3 +217,44 @@ pub fn connect_to_proxy() {
     .arg("Wi-Fi")
     .arg("on");
 }
+
+#[cfg(target_os = "windows")]
+pub fn disconnect_from_proxy() {
+  // Fetch the 'Internet Settings' registry key.
+  let settings = Hive::CurrentUser
+    .open(
+      r"Software\Microsoft\Windows\CurrentVersion\Internet Settings",
+      Security::AllAccess,
+    )
+    .unwrap();
+
+  // Set registry values.
+  settings.set_value("ProxyEnable", &Data::U32(0)).unwrap();
+
+  println!("Disconnected from the proxy.");
+}
+
+#[cfg(target_os = "linux")]
+pub fn disconnect_from_proxy() {
+  // Set the proxy via gsettings
+  let set_proxy = Command::new("gsettings")
+    .arg("set")
+    .arg("org.gnome.system.proxy")
+    .arg("mode")
+    .arg("none")
+    .output()
+    .expect("failed to execute process");
+
+  if !set_proxy.status.success() {
+    println!("Failed to set proxy: {}", set_proxy.status);
+  }
+}
+
+#[cfg(target_os = "macos")]
+pub fn disconnect_from_proxy() {
+  // Set the proxy via networksetup
+  let set_proxy = Command::new("networksetup")
+    .arg("-setwebproxystate")
+    .arg("Wi-Fi")
+    .arg("off");
+}

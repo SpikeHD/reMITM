@@ -1,4 +1,5 @@
 import { useState } from 'preact/hooks'
+import { invoke } from '@tauri-apps/api/tauri'
 
 import './OnOff.css'
 import OnOffSVG from '../assets/onoff.svg'
@@ -8,6 +9,8 @@ export function OnOff() {
 
   const toggle = () => {
     setIsOn(!isOn)
+
+    isOn ? invoke('disconnect_from_proxy') : invoke('connect_to_proxy')
   }
 
   return (
