@@ -1,0 +1,20 @@
+.Textbox {
+  padding: 8px;
+  border: none;
+
+  appearance: none;
+  outline: none;
+
+  border-radius: 4px;
+
+  background: var(--textbox-bg);
+  color: #fff;
+
+  text-align: center;
+
+  width: 100%;
+}
+
+.Textbox:focus {
+
+}

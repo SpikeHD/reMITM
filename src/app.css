@@ -4,6 +4,8 @@
   --green: #3ece45;
 
   --bg: #282528;
+
+  --textbox-bg: #131013;
 }
 
 body {
@@ -17,5 +19,4 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
 }

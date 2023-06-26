@@ -15,8 +15,8 @@ export function OnOff() {
 
   return (
     <div id="OnOffToggle" onClick={toggle}>
+    <span>{isOn ? 'Connected' : 'Disconnected'}</span>
       <img src={OnOffSVG} class={isOn ? 'toggled' : ''} />
-      <span>{isOn ? 'Connected' : 'Disconnected'}</span>
     </div>
   )
 }
