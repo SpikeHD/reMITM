@@ -5,11 +5,21 @@ use std::path::PathBuf;
 
 #[derive(Deserialize, Serialize)]
 pub struct Config {
-  pub launch_at_startup: bool,
-  pub proxy_port: u16,
-  pub urls_to_redirect: Vec<String>,
-  pub redirect_to: String,
-  pub log_requests: bool,
+  pub launch_at_startup: Option<bool>,
+  pub proxy_port: Option<u16>,
+  pub urls_to_redirect: Option<Vec<String>>,
+  pub redirect_to: Option<String>,
+  pub log_requests: Option<bool>,
+}
+
+pub fn default_config() -> Config {
+  Config {
+    launch_at_startup: Some(false),
+    proxy_port: Some(8111),
+    urls_to_redirect: Some(vec![]),
+    redirect_to: Some("http://localhost:3000".to_string()),
+    log_requests: Some(false),
+  }
 }
 
 pub fn config_path() -> PathBuf {
@@ -28,11 +38,11 @@ pub fn get_config() -> Config {
     serde_json::from_str(&contents).unwrap()
   } else {
     Config {
-      launch_at_startup: false,
-      proxy_port: 8111,
-      urls_to_redirect: vec![],
-      redirect_to: "http://localhost:3000".to_string(),
-      log_requests: false,
+      launch_at_startup: Some(false),
+      proxy_port: Some(8111),
+      urls_to_redirect: Some(vec![]),
+      redirect_to: Some("http://localhost:3000".to_string()),
+      log_requests: Some(false),
     }
   }
 }
@@ -53,11 +63,11 @@ pub fn init_config() {
 
   if !path.exists() {
     let config = Config {
-      launch_at_startup: false,
-      proxy_port: 8111,
-      urls_to_redirect: vec![],
-      redirect_to: "http://localhost:3000".to_string(),
-      log_requests: false,
+      launch_at_startup: Some(false),
+      proxy_port: Some(8111),
+      urls_to_redirect: Some(vec![]),
+      redirect_to: Some("http://localhost:3000".to_string()),
+      log_requests: Some(false),
     };
 
     let config_json = serde_json::to_string(&config).unwrap();

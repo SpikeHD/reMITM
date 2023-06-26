@@ -16,12 +16,13 @@ use rustls_pemfile as pemfile;
 #[cfg(windows)]
 use registry::{Data, Hive, Security};
 
+use crate::config::default_config;
 use crate::{config, certificate};
 
 // Globally store the server we are redirecting to
 static REDIRECT_TO: Lazy<Mutex<String>> = Lazy::new(|| {
   let config = config::get_config();
-  Mutex::new(config.redirect_to)
+  Mutex::new(config.redirect_to.unwrap_or(default_config().redirect_to.unwrap()))
 });
 
 async fn shutdown_signal() {
@@ -38,7 +39,7 @@ impl HttpHandler for ProxyHandler {
   async fn should_intercept(&mut self, _ctx: &HttpContext, req: &Request<Body>) -> bool {
     // Get URIs from config
     let config = config::get_config();
-    let urls_to_redirect = config.urls_to_redirect;
+    let urls_to_redirect = config.urls_to_redirect.unwrap_or(default_config().urls_to_redirect.unwrap());
 
     // Get the request URI
     let uri = req.uri().clone();
@@ -93,7 +94,7 @@ pub fn set_redirect_server(server: String) {
 
   // Set in config
   let mut config = config::get_config();
-  config.redirect_to = server;
+  config.redirect_to = Some(server);
   config::write_config(config);  
 
   println!("Redirecting requests to: {}", REDIRECT_TO.lock().unwrap());
@@ -103,7 +104,7 @@ pub fn set_redirect_server(server: String) {
  * Starts the HTTP(S) proxy server.
  */
 pub async fn create_proxy() {
-  let proxy_port = config::get_config().proxy_port;
+  let proxy_port = config::get_config().proxy_port.unwrap_or(default_config().proxy_port.unwrap());
   let certificate_path = certificate::cert_path();
 
   let cert_path = PathBuf::from(certificate_path);
@@ -147,7 +148,7 @@ pub async fn create_proxy() {
 pub fn connect_to_proxy() {
   // Create the server string
   let config = config::get_config();
-  let proxy_port = config.proxy_port;
+  let proxy_port = config.proxy_port.unwrap_or(default_config().proxy_port.unwrap());
   let server = format!("http=127.0.0.1:{};https=127.0.0.1:{}", proxy_port, proxy_port);
 
   // Fetch the 'Internet Settings' registry key.
