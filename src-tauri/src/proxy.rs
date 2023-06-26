@@ -176,20 +176,40 @@ pub fn connect_to_proxy() {
   // Create the server string
   let config = config::get_config();
   let proxy_port = config.proxy_port.unwrap_or(default_config().proxy_port.unwrap());
-  let server = format!("http://127.0.0.1:{};https://127.0.0.1:{}", proxy_port, proxy_port);
+  let server = format!("127.0.0.1");
 
   // Set the proxy via gsettings
+  let set_proxy = Command::new("gsettings")
+    .arg("set")
+    .arg("org.gnome.system.proxy.http")
+    .arg("host")
+    .arg(server.clone())
+    .output()
+    .expect("failed to execute process");
+
+  println!("Set http proxy: {}", set_proxy.status);
+
+  // Set https proxy as well
+  let set_proxy = Command::new("gsettings")
+    .arg("set")
+    .arg("org.gnome.system.proxy.https")
+    .arg("host")
+    .arg(server)
+    .output()
+    .expect("failed to execute process");
+
+  println!("Set https proxy: {}", set_proxy.status);
+
+  // Set proxy mode to manual
   let set_proxy = Command::new("gsettings")
     .arg("set")
     .arg("org.gnome.system.proxy")
     .arg("mode")
     .arg("manual")
-    .arg("http")
-    .arg(server.clone())
-    .arg("https")
-    .arg(server)
     .output()
     .expect("failed to execute process");
+
+  println!("Set proxy mode: {}", set_proxy.status);
 
   if !set_proxy.status.success() {
     println!("Failed to set proxy: {}", set_proxy.status);
