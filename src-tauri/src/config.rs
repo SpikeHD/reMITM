@@ -66,6 +66,7 @@ pub fn get_config() -> Config {
   }
 }
 
+#[tauri::command]
 pub fn write_config(config: Config) {
   let path = config_path();
   let config_json = serde_json::to_string(&config).unwrap();

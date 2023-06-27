@@ -42,11 +42,19 @@ pub fn get_platform() -> String {
 fn main() {
   init();
 
-  proxy::create_proxy();
+  // Block until the proxy is ready
+  tokio::runtime::Builder::new_current_thread()
+    .enable_all()
+    .build()
+    .unwrap()
+    .block_on(async {
+      proxy::create_proxy().await;
+    });
 
   tauri::Builder::default()
     .invoke_handler(tauri::generate_handler![
       config::get_config,
+      config::write_config,
       proxy::connect_to_proxy,
       proxy::disconnect_from_proxy,
     ])

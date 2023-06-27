@@ -1,33 +1,49 @@
+import { h } from 'preact'
 import { useState, useEffect } from 'preact/hooks'
 
 import './Textbox.css'
 
 interface Props {
   onChange?: (value: string) => void
-  onUnfocus?: (value: string) => void
+  onBlur?: (value: string) => void
   onEnter?: (value: string) => void
-  value?: string
+  defaultValue?: string
+  placeholder?: string
 }
 
-export function Textbox(props: Props) {
+export function Textbox(props: Props){
   const [value, setValue] = useState('')
 
   useEffect(() => {
-    setValue(props.value || '')
-  }, [props.value])
-  
+    setValue(props.defaultValue || '')
+  }, [props.defaultValue])
+
+  const handleInputChange = (e: h.JSX.TargetedEvent<HTMLInputElement>) => {
+    const newValue = e.currentTarget.value
+    setValue(newValue)
+    props.onChange?.(newValue)
+  }
+
+  const handleBlur = () => {
+    props.onBlur?.(value)
+  }
+
+  const handleKeyPress = (e: h.JSX.TargetedKeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      props.onEnter?.(value)
+    }
+  }
+
   return (
     <input
-      type="text" 
-      class="Textbox"
-      onChange={e => {
-        // @ts-ignore
-        setValue(e.target.value)
-        props.onChange && props.onChange(value)
-      }}
-      onBlur={(() => props.onUnfocus && props.onUnfocus(value))}
-      onKeyPress={e => e.key === 'Enter' && props.onEnter && props.onEnter(value)}
+      type="text"
+      className="Textbox"
       value={value}
+      onInput={handleInputChange}
+      onBlur={handleBlur}
+      onKeyPress={handleKeyPress}
+      placeholder={props.placeholder}
+      ref={(input) => input}
     />
   )
 }

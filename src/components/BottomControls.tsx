@@ -1,5 +1,3 @@
-import { useState } from 'preact/hooks'
-
 import './BottomControls.css'
 
 import TerminalIcon from '../assets/terminal.svg'

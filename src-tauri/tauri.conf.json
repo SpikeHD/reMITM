@@ -26,7 +26,7 @@
         "icons/icon.png",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.dev",
+      "identifier": "com.remitm.dev",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
