@@ -42,22 +42,27 @@ pub fn get_platform() -> String {
 fn main() {
   init();
 
-  // Block until the proxy is ready
-  tokio::runtime::Builder::new_current_thread()
-    .enable_all()
-    .build()
-    .unwrap()
-    .block_on(async {
-      proxy::create_proxy().await;
-    });
-
   tauri::Builder::default()
     .invoke_handler(tauri::generate_handler![
+      connect,
+      disconnect,
       config::get_config,
       config::write_config,
-      proxy::connect_to_proxy,
-      proxy::disconnect_from_proxy,
     ])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
+}
+
+#[tauri::command]
+async fn connect() {
+  println!("Connecting...");
+
+  proxy::connect_to_proxy();
+  proxy::create_proxy().await;
+}
+
+#[tauri::command]
+fn disconnect() {
+  println!("Disconnecting...");
+  proxy::disconnect_from_proxy();
 }

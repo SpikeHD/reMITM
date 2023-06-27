@@ -3,6 +3,7 @@ use std::net::SocketAddr;
 use std::path::{PathBuf};
 use std::process::Command;
 
+use hudsucker::hyper::http::uri::PathAndQuery;
 use once_cell::sync::Lazy;
 
 use hudsucker::{
@@ -73,8 +74,12 @@ impl HttpHandler for ProxyHandler {
       *res.body()
     }
 
-    let path_and_query = uri.path_and_query().unwrap().to_string();
-    let new_uri = format!("{}{}", REDIRECT_TO.lock().unwrap(), path_and_query);
+    let path_and_query = req.uri().path_and_query();
+    let mut new_uri = format!("{}", REDIRECT_TO.lock().unwrap());
+
+    if !path_and_query.is_none() {
+      new_uri = format!("{}{}", new_uri, path_and_query.unwrap());
+    }
 
     *req.uri_mut() = new_uri.parse().unwrap();
 
