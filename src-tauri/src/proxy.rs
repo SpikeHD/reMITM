@@ -221,14 +221,15 @@ pub fn connect_to_proxy() {
 pub fn connect_to_proxy() {
   // Create the server string
   let config = config::get_config();
-  let proxy_port = config.proxy_port;
+  let proxy_port = format!("{}", config.proxy_port.unwrap_or(default_config().proxy_port.unwrap()));
+
 
   // Set the proxy via networksetup
   let set_proxy = Command::new("networksetup")
     .arg("-setwebproxy")
     .arg("Wi-Fi")
     .arg("127.0.0.1")
-    .arg(proxy_port);
+    .arg(proxy_port.clone());
 
   let set_proxy = Command::new("networksetup")
     .arg("-setsecurewebproxy")
