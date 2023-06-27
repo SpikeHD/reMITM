@@ -7,6 +7,7 @@ mod certificate;
 mod config;
 mod matcher;
 mod proxy;
+mod tools;
 
 /**
  * Ensures config path and file exists
@@ -22,6 +23,20 @@ pub fn init() {
   }
 
   certificate::install_ca_files(crt_path.join("cert.crt"));
+}
+
+/**
+ * Get platform name. Used for selectively greying-out or accepting certain configurations
+ */
+pub fn get_platform() -> String {
+  #[cfg(target_os = "windows")]
+  return "windows".to_string();
+
+  #[cfg(target_os = "linux")]
+  return "linux".to_string();
+
+  #[cfg(target_os = "macos")]
+  return "macos".to_string();
 }
 
 fn main() {

@@ -1,19 +1,24 @@
-import './app.css'
+import { useState } from 'preact/hooks'
+
 import { OnOff } from './components/OnOff'
 import { RedirectSelect } from './components/RedirectSelect'
-import { Textbox } from './components/Textbox'
 import { UriList } from './components/UriList'
 
+import './app.css'
+import { BottomControls } from './components/BottomControls'
+
 export function App() {
+  const [isOn , setIsOn ] = useState(false)
 
   return (
-    <div id="app">
-      <OnOff />
+    <>
+      <OnOff onChange={setIsOn} />
 
       <RedirectSelect />
 
       <UriList />
 
-    </div>
+      <BottomControls isOn={isOn} />
+    </>
   )
 }

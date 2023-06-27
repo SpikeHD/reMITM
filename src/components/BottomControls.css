@@ -1,0 +1,30 @@
+#BottomControls {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  width: 50%;
+  height: 5rem;
+
+  transition: opacity 0.2s ease-in-out;
+}
+
+#BottomControls.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#BottomControls span {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+#BottomControls img {
+  width: 30px;
+  height: 30px;
+}
+
+#BottomControls img:hover {
+  cursor: pointer;
+}

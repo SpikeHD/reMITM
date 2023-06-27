@@ -10,6 +10,9 @@ pub struct Config {
   pub urls_to_redirect: Option<Vec<String>>,
   pub redirect_to: Option<String>,
   pub log_requests: Option<bool>,
+  pub terminal: Option<String>,
+  pub modify_gsettings: Option<bool>,
+  pub use_env_variables: Option<bool>,
 }
 
 pub fn default_config() -> Config {
@@ -19,6 +22,28 @@ pub fn default_config() -> Config {
     urls_to_redirect: Some(vec![]),
     redirect_to: Some("http://localhost:3000".to_string()),
     log_requests: Some(false),
+
+    // C:\Windows\System32\cmd.exe for windows, gnome-terminal for linux, Terminal.app for mac
+    #[cfg(target_os = "windows")]
+    terminal: Some("C:\\Windows\\System32\\cmd.exe".to_string()),
+
+    #[cfg(target_os = "linux")]
+    terminal: Some("gnome-terminal".to_string()),
+
+    #[cfg(target_os = "macos")]
+    terminal: Some("Terminal.app".to_string()),
+
+    // On linux you may want to enable using http(s)_proxy env variables and/or gsettings
+    #[cfg(target_os = "linux")]
+    modify_gsettings: Some(true),
+    #[cfg(target_os = "linux")]
+    use_env_variables: Some(true),
+
+    // Other platforms don't use/care about those
+    #[cfg(not(target_os = "linux"))]
+    modify_gsettings: Some(false),
+    #[cfg(not(target_os = "linux"))]
+    use_env_variables: Some(false),
   }
 }
 
@@ -37,13 +62,7 @@ pub fn get_config() -> Config {
     let contents = fs::read_to_string(path).unwrap();
     serde_json::from_str(&contents).unwrap()
   } else {
-    Config {
-      launch_at_startup: Some(false),
-      proxy_port: Some(8111),
-      urls_to_redirect: Some(vec![]),
-      redirect_to: Some("http://localhost:3000".to_string()),
-      log_requests: Some(false),
-    }
+   default_config()
   }
 }
 
@@ -62,13 +81,7 @@ pub fn init_config() {
   }
 
   if !path.exists() {
-    let config = Config {
-      launch_at_startup: Some(false),
-      proxy_port: Some(8111),
-      urls_to_redirect: Some(vec![]),
-      redirect_to: Some("http://localhost:3000".to_string()),
-      log_requests: Some(false),
-    };
+    let config = default_config();
 
     let config_json = serde_json::to_string(&config).unwrap();
     fs::write(path, config_json).unwrap();
