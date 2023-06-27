@@ -1,6 +1,6 @@
 import { useState } from 'preact/hooks'
 import { invoke } from '@tauri-apps/api/tauri'
-import { listen } from '@tauri-apps/api/event'
+//import { listen } from '@tauri-apps/api/event'
 
 import './OnOff.css'
 import OnOffSVG from '../assets/onoff.svg'

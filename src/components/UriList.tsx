@@ -15,12 +15,12 @@ export function UriList() {
     })()
   })
 
-  const addUri = (uri: string) => {
-    if (uri) {
-      console.log("Adding: ", uri)
+  const addUri = () => {
+    if (inputValue) {
+      console.log("Adding: ", inputValue)
   
       setInputValue('')
-      setUris(prevUris => [...prevUris, uri]);
+      setUris(prevUris => [...prevUris, inputValue]);
     }
   }
 

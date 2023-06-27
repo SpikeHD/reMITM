@@ -7,6 +7,7 @@ mod certificate;
 mod config;
 mod matcher;
 mod proxy;
+mod system;
 mod tools;
 
 /**
@@ -19,6 +20,7 @@ pub fn init() {
 
   // If the cert.crt doesn't exist, generate it
   if !crt_path.join("cert.crt").exists() {
+    println!("Generating CA files...");
     certificate::generate_ca_files(certificate::cert_path());
   }
 
@@ -40,6 +42,11 @@ pub fn get_platform() -> String {
 }
 
 fn main() {
+  // If we are in debug, don't reopen as admin/root
+  if !is_elevated::is_elevated() && !cfg!(debug_assertions) {
+    system::reopen_as_admin();
+  }
+
   init();
 
   tauri::Builder::default()

@@ -1,9 +1,6 @@
 use std::{fs, sync::Mutex};
 use std::net::SocketAddr;
 use std::path::{PathBuf};
-use std::process::Command;
-
-use hudsucker::hyper::http::uri::PathAndQuery;
 use once_cell::sync::Lazy;
 
 use hudsucker::{
@@ -61,8 +58,6 @@ impl HttpHandler for ProxyHandler {
     _ctx: &HttpContext,
     mut req: Request<Body>,
   ) -> RequestOrResponse {
-    let uri = req.uri().clone();
-
     // Handle CONNECT
     if req.method().as_str() == "CONNECT" {
       let builder = Response::builder()
