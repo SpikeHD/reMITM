@@ -1,0 +1,17 @@
+#TopControls {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 50px;
+  margin: 20px 0 0 20px;
+}
+
+#TopControls img {
+  height: 20px;
+  width: 20px;
+} 
+
+#TopControls img:hover {
+  cursor: pointer;
+}

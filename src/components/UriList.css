@@ -1,0 +1,63 @@
+#UriList {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  background: transparent;
+  color: #fff;
+
+  text-align: center;
+
+  width: 85%;
+  max-height: 30%;
+}
+
+#UriList span {
+  margin: 10px;
+}
+
+#UriListInner {
+  border: none;
+  background: transparent;
+
+  appearance: none;
+  outline: none;
+
+  border-radius: 4px;
+
+  color: #fff;
+
+  text-align: center;
+
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+
+  /* Inner box shadow on top and bottom */
+  box-shadow: inset 0 8px 8px -8px rgba(0, 0, 0, 0.5), inset 0 -8px 8px -8px rgba(0, 0, 0, 0.5);
+}
+
+#UriListInner .Textbox {
+  padding: 6px 0;
+  margin: 4px 0;
+}
+
+/* Hide scrollbar */
+#UriListInner::-webkit-scrollbar {
+  display: none;
+}
+
+#UriListInner ul {
+  list-style: none;
+  padding: 8px;
+  margin: 0;
+}
+
+#UriListInner li {
+  background: var(--textbox-bg);
+
+  margin: 8px 0;
+  padding: 8px;
+
+  width: 100%;
+}
