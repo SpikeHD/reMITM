@@ -30,6 +30,7 @@ export function Textbox(props: Props){
 
   const handleKeyPress = (e: h.JSX.TargetedKeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
+      console.log(props.onEnter)
       props.onEnter?.(value)
     }
   }

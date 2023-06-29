@@ -15,12 +15,21 @@ export function UriList() {
     })()
   }, [])
 
-  const addUri = () => {
+  const addUri = async () => {
     if (inputValue) {
+      const newList = [...uris, inputValue]
       console.log("Adding: ", inputValue)
   
       setInputValue('')
       setUris(prevUris => [...prevUris, inputValue]);
+
+      // Write to the config
+      const config = await invoke('get_config') as Config
+      config.urls_to_redirect = newList
+
+      await invoke('write_config', {
+        config
+      })
     }
   }
 
@@ -37,22 +46,26 @@ export function UriList() {
     })
   }
 
+  const handleUriChange = (uri: string, value: string) => {
+    if (!value) {
+      // Remove this URI from the list
+      removeUri(uri)
+    }
+  }
+
   return (
     <div id="UriList">
       <span>URIs to redirect:</span>
       <div id="UriListInner">
         {/* This first textboxes content is added to the list when the user unfocusses */}
-        <Textbox placeholder={"Enter a new URI..."} onBlur={addUri} onChange={setInputValue} />
+        <Textbox defaultValue={inputValue} placeholder={"Enter a new URI..."} onEnter={addUri} onBlur={addUri} onChange={setInputValue} />
 
         {uris.map((uri, i) => (
           <Textbox
             key={i}
-            onEnter={(value: string) => {
-              if (!value) {
-                // Remove this URI from the list
-                removeUri(uri)
-              }
-            }}
+            onEnter={(value) => handleUriChange(uri, value)}
+            onBlur={(value) => handleUriChange(uri, value)}
+            defaultValue={uri}
           />
         ))}
       </div>
