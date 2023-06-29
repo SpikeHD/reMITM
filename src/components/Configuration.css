@@ -1,0 +1,45 @@
+#Configuration {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+
+  background: var(--bg);
+
+  transition: transform 0.3s ease-in-out;
+
+  overflow: hidden;
+}
+
+#Configuration.hide {
+  transform: translateY(-300%);
+}
+
+#ConfigurationInner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+}
+
+#ConfigurationTop {
+  margin: 20px;
+}
+
+#ConfigurationTop:hover {
+  cursor: pointer;
+}
+
+#ConfigurationTop img {
+  height: 24px;
+}
+
+.ConfigurationRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}

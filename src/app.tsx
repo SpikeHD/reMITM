@@ -7,6 +7,7 @@ import { UriList } from './components/UriList'
 import './app.css'
 import { BottomControls } from './components/BottomControls'
 import { TopControls } from './components/TopControls'
+import { Configuration } from './components/Configuration'
 
 export function App() {
   const [isOn , setIsOn ] = useState(false)
@@ -23,6 +24,12 @@ export function App() {
       <UriList />
 
       <BottomControls isOn={isOn} />
+
+      {
+        configOpen && (
+          <Configuration onClose={() => setConfigOpen(false)} />
+        )
+      }
     </>
   )
 }
