@@ -11,7 +11,23 @@ export function RedirectSelect() {
   useEffect(() => {
     (async () => {
       const config = await invoke('get_config') as Config
-      setRedirect(config.redirect_to)
+      
+      // Split the rest of the url from the http(s):// part
+      const split = config.redirect_to.split('://')
+      const redirect = split[1] || config.redirect_to
+
+      // Split url and port
+      const url = redirect.split(':')
+      const port = url[1]
+      const urlWithoutPort = url[0]
+
+      setRedirect(urlWithoutPort)
+      setPort(port)
+
+      // Set the redirect server
+      await invoke('set_redirect_server', {
+        server: `${urlWithoutPort}:${port}`
+      })
     })()
   }, [])
 
