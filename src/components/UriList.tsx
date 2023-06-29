@@ -13,7 +13,7 @@ export function UriList() {
       const config = await invoke('get_config') as Config
       setUris(config.urls_to_redirect)
     })()
-  })
+  }, [])
 
   const addUri = () => {
     if (inputValue) {
@@ -47,7 +47,7 @@ export function UriList() {
         {uris.map((uri, i) => (
           <Textbox
             key={i}
-            onBlur={(value: string) => {
+            onEnter={(value: string) => {
               if (!value) {
                 // Remove this URI from the list
                 removeUri(uri)

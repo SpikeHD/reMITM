@@ -1,6 +1,7 @@
 use std::{fs, sync::Mutex};
 use std::net::SocketAddr;
 use std::path::{PathBuf};
+use std::process::Command;
 use once_cell::sync::Lazy;
 
 use hudsucker::{
@@ -19,10 +20,7 @@ use crate::config::default_config;
 use crate::{config, certificate};
 
 // Globally store the server we are redirecting to
-static REDIRECT_TO: Lazy<Mutex<String>> = Lazy::new(|| {
-  let config = config::get_config();
-  Mutex::new(config.redirect_to.unwrap_or(default_config().redirect_to.unwrap()))
-});
+static REDIRECT_TO: Lazy<Mutex<String>> = Lazy::new(|| Mutex::new(default_config().redirect_to.unwrap()));
 
 async fn shutdown_signal() {
   tokio::signal::ctrl_c()

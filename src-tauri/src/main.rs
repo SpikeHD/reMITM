@@ -1,7 +1,8 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use config::init_config;
+use config::{init_config, default_config};
+use proxy::{set_redirect_server};
 
 mod certificate;
 mod config;
@@ -43,11 +44,17 @@ pub fn get_platform() -> String {
 
 fn main() {
   // If we are in debug, don't reopen as admin/root
+  #[cfg(target_os = "windows")]
   if !is_elevated::is_elevated() && !cfg!(debug_assertions) {
     system::reopen_as_admin();
   }
 
   init();
+
+  let config = config::get_config();
+
+  // set redirect to via config
+  set_redirect_server(config.redirect_to.unwrap_or(default_config().redirect_to.unwrap()));
 
   tauri::Builder::default()
     .invoke_handler(tauri::generate_handler![

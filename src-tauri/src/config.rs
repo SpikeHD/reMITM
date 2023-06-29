@@ -1,9 +1,9 @@
 use serde::de::value::Error;
 use serde::{Deserialize, Serialize};
-use std::fs;
+use std::{fs, default};
 use std::path::PathBuf;
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Clone)]
 pub struct Config {
   pub launch_at_startup: Option<bool>,
   pub proxy_port: Option<u16>,
@@ -14,6 +14,10 @@ pub struct Config {
   pub modify_gsettings: Option<bool>,
   pub use_env_variables: Option<bool>,
 }
+
+// Create a config "cache" that is filled and used by get_config()
+// write_config() still writes to the file
+pub static mut CONFIG: Option<Config> = None;
 
 pub fn default_config() -> Config {
   Config {
@@ -56,21 +60,36 @@ pub fn config_path() -> PathBuf {
 
 #[tauri::command]
 pub fn get_config() -> Config {
-  let path = config_path();
-
-  if path.exists() {
-    let contents = fs::read_to_string(path).unwrap();
-    serde_json::from_str(&contents).unwrap()
-  } else {
-   default_config()
+  unsafe {
+    // Try to read from the config cache, if it's not there read from the file
+    if CONFIG.is_none() {
+      let path = config_path();
+  
+      if path.exists() {
+        let contents = fs::read_to_string(path).unwrap();
+        serde_json::from_str(&contents).unwrap()
+      } else {
+        default_config()
+      }
+    } else {
+      // CONFIG is cached
+      CONFIG.clone().unwrap()
+    }
   }
 }
 
 #[tauri::command]
 pub fn write_config(config: Config) {
-  let path = config_path();
-  let config_json = serde_json::to_string(&config).unwrap();
-  fs::write(path, config_json).unwrap();
+  // Start in seperate thread to not block the main thread
+  std::thread::spawn(move || {
+    unsafe {
+      CONFIG = Some(config.clone());
+    }
+
+    let path = config_path();
+    let config_json = serde_json::to_string(&config).unwrap();
+    fs::write(path, config_json).unwrap();
+  });
 }
 
 pub fn init_config() {
