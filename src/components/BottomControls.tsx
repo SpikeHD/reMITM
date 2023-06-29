@@ -1,3 +1,5 @@
+import { invoke } from '@tauri-apps/api'
+
 import './BottomControls.css'
 
 import TerminalIcon from '../assets/terminal.svg'
@@ -8,10 +10,14 @@ interface Props {
 }
 
 export function BottomControls(props: Props) {
+  const openShell = async () => {
+    await invoke('open_shell')
+  }
+
   return (
     <div id="BottomControls" class={props.isOn ? '' : 'hide'}>
       <span>
-        <img src={TerminalIcon} />
+        <img src={TerminalIcon} onClick={openShell} />
       </span>
       <span>
         <img src={LogIcon} />

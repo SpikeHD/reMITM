@@ -1,4 +1,4 @@
-use std::process::Command;
+use open;
 
 use crate::config;
 
@@ -10,9 +10,14 @@ pub fn open_shell() {
   let config = config::get_config();
   let terminal = config.terminal.unwrap();
 
-  let set_proxy = Command::new(terminal)
-    .output()
-    .expect("failed to execute process");
+  println!("Starting {}", terminal);
+
+  match open::that(
+    terminal,
+  ) {
+    Ok(_) => (),
+    Err(e) => println!("Failed to open terminal: {}", e),
+  };
 }
 
 #[cfg(target_os = "linux")]
@@ -21,9 +26,14 @@ pub fn open_shell() {
   let config = config::get_config();
   let terminal = config.terminal.unwrap();
 
-  let set_proxy = Command::new(terminal)
-    .output()
-    .expect("failed to execute process");
+  println!("Starting {}", terminal);
+
+  match open::that(
+    terminal,
+  ) {
+    Ok(_) => (),
+    Err(e) => println!("Failed to open terminal: {}", e),
+  };
 }
 
 #[cfg(target_os = "macos")]
@@ -32,7 +42,12 @@ pub fn open_shell() {
   let config = config::get_config();
   let terminal = config.terminal.unwrap();
 
-  let set_proxy = Command::new(terminal)
-    .output()
-    .expect("failed to execute process");
+  println!("Starting {}", terminal);
+
+  match open::that(
+    terminal,
+  ) {
+    Ok(_) => (),
+    Err(e) => println!("Failed to open terminal: {}", e),
+  };
 }
