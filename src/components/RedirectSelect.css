@@ -12,3 +12,14 @@
 #RedirectSelect span {
   margin: 10px;
 }
+
+#RedirectSelect .TextboxOuter {
+  padding: 8px;
+  width: 100%;
+
+  justify-content: center;
+}
+
+#RedirectSelect .Textbox {
+  text-align: center;
+}

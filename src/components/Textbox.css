@@ -1,20 +1,49 @@
 .Textbox {
-  padding: 8px;
-  border: none;
+  color: #fff;
 
   appearance: none;
   outline: none;
+  border: none;
 
-  border-radius: 4px;
+  background: transparent;
 
-  background: var(--textbox-bg);
-  color: #fff;
+  margin: 0 8px;
 
-  text-align: center;
-
-  width: 100%;
+  width: 80%;
 }
 
 .Textbox:focus {
 
+}
+
+.TextboxOuter {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  border-radius: 4px;
+
+  background: var(--textbox-bg);
+
+  text-align: center;
+}
+
+.TextDelete {
+  position: relative;
+  top: 50%;
+
+  height: 14px;
+  width: 14px;
+
+  margin-right: 10px;
+}
+
+.TextDelete:hover {
+  cursor: pointer;
+}
+
+.TextDelete img {
+  height: inherit;
+  width: inherit;
 }
