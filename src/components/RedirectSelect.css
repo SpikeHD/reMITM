@@ -6,7 +6,7 @@
 
   margin-bottom: 5%;
 
-  width: 80%;
+  width: 85%;
 }
 
 #RedirectSelect span {
@@ -22,4 +22,25 @@
 
 #RedirectSelect .Textbox {
   text-align: center;
+}
+
+.RedirectInner {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+
+  width: 100%;
+}
+
+.RedirectServer {
+  width: 70% !important;
+}
+
+.RedirectPort {
+  width: 15% !important;
+}
+
+.RedirectPort input {
+  margin: 0;
 }

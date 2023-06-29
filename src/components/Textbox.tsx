@@ -11,6 +11,8 @@ interface Props {
   onDelete?: () => void
   defaultValue?: string
   placeholder?: string
+  readonly?: boolean
+  class?: string
 }
 
 export function Textbox(props: Props){
@@ -38,7 +40,7 @@ export function Textbox(props: Props){
   }
 
   return (
-    <div class="TextboxOuter">
+    <div class={"TextboxOuter " + (props?.class || '')}>
       <input
         type="text"
         className="Textbox"
@@ -48,6 +50,7 @@ export function Textbox(props: Props){
         onKeyPress={handleKeyPress}
         placeholder={props.placeholder}
         ref={(input) => input}
+        readonly={props.readonly !== null && props.readonly}
       />
 
       { props.onDelete && (

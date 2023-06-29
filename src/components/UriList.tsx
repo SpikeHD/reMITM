@@ -67,6 +67,7 @@ export function UriList() {
             onBlur={(value) => handleUriChange(uri, value)}
             defaultValue={uri}
             onDelete={() => removeUri(uri)}
+            readonly={true}
           />
         ))}
       </div>

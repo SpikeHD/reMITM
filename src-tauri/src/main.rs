@@ -62,6 +62,7 @@ fn main() {
       disconnect,
       config::get_config,
       config::write_config,
+      proxy::set_redirect_server
     ])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");

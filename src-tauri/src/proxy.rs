@@ -67,12 +67,38 @@ impl HttpHandler for ProxyHandler {
       *res.body()
     }
 
+    // Get URIs from config
+    let config = config::get_config();
+    let urls_to_redirect = config.urls_to_redirect.unwrap_or(default_config().urls_to_redirect.unwrap());
+    
+    // Get the request URI
+    let uri = req.uri().clone();
+    let mut do_redirect = false;
+    
+    // Check if the request URI matches any of the URIs in the config
+    for url in urls_to_redirect {
+      println!("Comparing {} with {}", url, uri.to_string());
+
+      if uri.to_string().contains(&url) {
+        do_redirect = true;
+      }
+    }
+
+    // If we don't need to redirect, just let the request continue
+    if !do_redirect {
+      return req.into();
+    }
+
+    println!("Found URI to redirect: {}", req.uri());
+
     let path_and_query = req.uri().path_and_query();
     let mut new_uri = format!("{}", REDIRECT_TO.lock().unwrap());
 
     if !path_and_query.is_none() {
       new_uri = format!("{}{}", new_uri, path_and_query.unwrap());
     }
+
+    println!("Redirecting to {}...", new_uri);
 
     *req.uri_mut() = new_uri.parse().unwrap();
 
@@ -88,6 +114,7 @@ impl HttpHandler for ProxyHandler {
   }
 }
 
+#[tauri::command]
 pub fn set_redirect_server(server: String) {
   *REDIRECT_TO.lock().unwrap() = server.clone();
 
