@@ -6,7 +6,7 @@
   <div align="center">
     <img src="https://img.shields.io/github/issues-raw/SpikeHD/reMITM.svg?maxAge=25000" />
     <img src="https://img.shields.io/github/contributors/SpikeHD/reMITM.svg" />
-    <img src="https://img.shields.io/github/commit-activity/y/SpikeHD/reMITM.svg" />
+    <img src="https://img.shields.io/github/commit-activity/m/SpikeHD/reMITM.svg" />
   </div>
 </div>
 
