@@ -72,3 +72,28 @@ jobs:
         with:
           name: remitm_linux
           path: src-tauri/target/release/remitm
+
+  build-mac:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Install deps and build
+        run: HASH=$(git rev-parse --short HEAD) yarn && yarn build
+
+      - name: Upload build
+        uses: actions/upload-artifact@v3
+        with:
+          name: remitm_mac
+          path: src-tauri/target/release/remitm
