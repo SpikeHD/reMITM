@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build && tauri build",
     "preview": "vite preview",
     "format": "cargo fmt --manifest-path ./src-tauri/Cargo.toml --all && yarn prettier --write --cache --loglevel warn .",
     "lint": "cargo clippy --manifest-path ./src-tauri/Cargo.toml --no-default-features && yarn tsc --noEmit && yarn eslint src",
