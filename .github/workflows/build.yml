@@ -37,20 +37,13 @@ jobs:
         run: $HASH=$(git rev-parse --short HEAD)
 
       - name: Install deps and build
-        run: yarn && yarn build --debug
-        
-      - name: Compress the build
-        uses: vimtor/action-zip@v1
-        with:
-          files: src-tauri/target/release/remitm.exe
-          recursive: false
-          dest: remitm_windows.zip
+        run: yarn && yarn build
 
       - name: Upload build
         uses: actions/upload-artifact@v3
         with:
           name: remitm_windows
-          path: remitm_windows.zip
+          path: src-tauri/target/release/remitm.exe
 
   build-ubuntu:
     runs-on: ubuntu-20.04
@@ -72,17 +65,10 @@ jobs:
         run: sudo apt install libwebkit2gtk-4.0-dev build-essential curl wget libssl-dev libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev
 
       - name: Install deps and build
-        run: HASH=$(git rev-parse --short HEAD) yarn && yarn build --debug
-
-      - name: Compress the build
-        uses: vimtor/action-zip@v1
-        with:
-          files: src-tauri/target/release/remitm
-          recursive: false
-          dest: remitm_linux.zip
+        run: HASH=$(git rev-parse --short HEAD) yarn && yarn build
 
       - name: Upload build
         uses: actions/upload-artifact@v3
         with:
           name: remitm_linux
-          path: remitm_linux.zip
+          path: src-tauri/target/release/remitm
