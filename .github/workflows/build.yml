@@ -37,7 +37,7 @@ jobs:
         run: $HASH=$(git rev-parse --short HEAD)
 
       - name: Install deps and build
-        run: yarn && yarn build
+        run: yarn && yarn tauri build
 
       - name: Upload build
         uses: actions/upload-artifact@v3
@@ -65,7 +65,7 @@ jobs:
         run: sudo apt install libwebkit2gtk-4.0-dev build-essential curl wget libssl-dev libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev
 
       - name: Install deps and build
-        run: HASH=$(git rev-parse --short HEAD) yarn && yarn build
+        run: HASH=$(git rev-parse --short HEAD) yarn && yarn tauri build
 
       - name: Upload build
         uses: actions/upload-artifact@v3
@@ -90,7 +90,7 @@ jobs:
           toolchain: stable
 
       - name: Install deps and build
-        run: HASH=$(git rev-parse --short HEAD) yarn && yarn build
+        run: HASH=$(git rev-parse --short HEAD) yarn && yarn tauri build
 
       - name: Upload build
         uses: actions/upload-artifact@v3
