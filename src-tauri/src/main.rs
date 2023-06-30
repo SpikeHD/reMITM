@@ -38,7 +38,6 @@ fn main() {
   init();
 
   let config = config::get_config();
-
   // set redirect to via config
   set_redirect_server(config.redirect_to.unwrap_or_else(|| default_config().redirect_to.unwrap()));
 
