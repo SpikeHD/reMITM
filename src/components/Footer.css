@@ -1,0 +1,13 @@
+#Footer {
+  position: absolute;
+
+  bottom: 4px;
+  left: 4px;
+
+  text-align: left;
+  font-size: 12px;
+
+  opacity: 0.7;
+
+  width: 80%;
+}

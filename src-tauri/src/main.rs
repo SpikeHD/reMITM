@@ -47,6 +47,7 @@ fn main() {
       connect,
       disconnect,
       get_platform,
+      get_hash,
       config::get_config,
       config::write_config,
       proxy::set_redirect_server,
@@ -83,4 +84,9 @@ fn get_platform() -> String {
 
   #[cfg(target_os = "macos")]
   return "macos".to_string();
+}
+
+#[tauri::command]
+fn get_hash() -> String {
+  option_env!("HASH").unwrap_or("UNKNOWN").to_string()
 }

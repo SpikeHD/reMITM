@@ -8,6 +8,7 @@ import './app.css'
 import { BottomControls } from './components/BottomControls'
 import { TopControls } from './components/TopControls'
 import { Configuration } from './components/Configuration'
+import { Footer } from './components/Footer'
 
 export function App() {
   const [isOn , setIsOn ] = useState(false)
@@ -24,6 +25,8 @@ export function App() {
       <UriList />
 
       <BottomControls isOn={isOn} />
+
+      <Footer />
 
       {
         configOpen && (
