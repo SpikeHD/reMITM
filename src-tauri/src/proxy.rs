@@ -1,7 +1,6 @@
 use std::{fs, sync::Mutex};
 use std::net::SocketAddr;
 
-
 use once_cell::sync::Lazy;
 
 use hudsucker::{
@@ -198,6 +197,8 @@ pub fn connect_to_proxy() {
 #[cfg(target_os = "linux")]
 #[tauri::command]
 pub fn connect_to_proxy() {
+  use std::process::Command;
+
   // Create the server string
   let config = config::get_config();
   let proxy_port = config.proxy_port.unwrap_or_else(|| default_config().proxy_port.unwrap());
@@ -244,6 +245,8 @@ pub fn connect_to_proxy() {
 #[cfg(target_os = "macos")]
 #[tauri::command]
 pub fn connect_to_proxy() {
+  use std::process::Command;
+
   // Create the server string
   let config = config::get_config();
   let proxy_port = format!("{}", config.proxy_port.unwrap_or_else(|| default_config().proxy_port.unwrap()));
@@ -288,6 +291,8 @@ pub fn disconnect_from_proxy() {
 #[cfg(target_os = "linux")]
 #[tauri::command]
 pub fn disconnect_from_proxy() {
+  use std::process::Command;
+
   // Set the proxy via gsettings
   let set_proxy = Command::new("gsettings")
     .arg("set")
@@ -305,6 +310,8 @@ pub fn disconnect_from_proxy() {
 #[cfg(target_os = "macos")]
 #[tauri::command]
 pub fn disconnect_from_proxy() {
+  use std::process::Command;
+
   // Set the proxy via networksetup
   let set_proxy = Command::new("networksetup")
     .arg("-setwebproxystate")
