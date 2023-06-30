@@ -28,20 +28,6 @@ pub fn init() {
   certificate::install_ca_files(crt_path.join("cert.crt"));
 }
 
-/**
- * Get platform name. Used for selectively greying-out or accepting certain configurations
- */
-pub fn get_platform() -> String {
-  #[cfg(target_os = "windows")]
-  return "windows".to_string();
-
-  #[cfg(target_os = "linux")]
-  return "linux".to_string();
-
-  #[cfg(target_os = "macos")]
-  return "macos".to_string();
-}
-
 fn main() {
   // If we are in debug, don't reopen as admin/root
   #[cfg(target_os = "windows")]
@@ -60,6 +46,7 @@ fn main() {
     .invoke_handler(tauri::generate_handler![
       connect,
       disconnect,
+      get_platform,
       config::get_config,
       config::write_config,
       proxy::set_redirect_server,
@@ -81,4 +68,19 @@ async fn connect() {
 fn disconnect() {
   println!("Disconnecting...");
   proxy::disconnect_from_proxy();
+}
+
+/**
+ * Get platform name. Used for selectively greying-out or accepting certain configurations
+ */
+#[tauri::command]
+fn get_platform() -> String {
+  #[cfg(target_os = "windows")]
+  return "windows".to_string();
+
+  #[cfg(target_os = "linux")]
+  return "linux".to_string();
+
+  #[cfg(target_os = "macos")]
+  return "macos".to_string();
 }

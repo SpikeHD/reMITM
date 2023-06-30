@@ -7,15 +7,15 @@
   width: 100%;
   height: 100%;
 
-  background: var(--bg);
+  background: var(--bg-alt);
 
-  transition: transform 0.3s ease-in-out;
+  transition: transform 0.1s ease-in-out;
 
   overflow: hidden;
 }
 
 #Configuration.hide {
-  transform: translateY(-300%);
+  transform: translateX(-100%);
 }
 
 #ConfigurationInner {
