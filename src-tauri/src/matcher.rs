@@ -1,7 +1,7 @@
 /**
  * Handle wildcards
  */
-pub fn string_matches_wildcard(string: &str, wildcard: &str) -> bool {
+pub fn _string_matches_wildcard(string: &str, wildcard: &str) -> bool {
   let mut string_chars = string.chars();
   let mut wildcard_chars = wildcard.chars();
 

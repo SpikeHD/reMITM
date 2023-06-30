@@ -36,7 +36,7 @@ impl HttpHandler for ProxyHandler {
   async fn should_intercept(&mut self, _ctx: &HttpContext, req: &Request<Body>) -> bool {
     // Get URIs from config
     let config = config::get_config();
-    let urls_to_redirect = config.urls_to_redirect.unwrap_or(default_config().urls_to_redirect.unwrap());
+    let urls_to_redirect = config.urls_to_redirect.unwrap_or_else(|| default_config().urls_to_redirect.unwrap());
 
     // Get the request URI
     let uri = req.uri().clone();
@@ -69,7 +69,7 @@ impl HttpHandler for ProxyHandler {
 
     // Get URIs from config
     let config = config::get_config();
-    let urls_to_redirect = config.urls_to_redirect.unwrap_or(default_config().urls_to_redirect.unwrap());
+    let urls_to_redirect = config.urls_to_redirect.unwrap_or_else(|| default_config().urls_to_redirect.unwrap());
     
     // Get the request URI
     let uri = req.uri().clone();
@@ -130,7 +130,7 @@ pub fn set_redirect_server(server: String) {
  * Starts the HTTP(S) proxy server.
  */
 pub async fn create_proxy() {
-  let proxy_port = config::get_config().proxy_port.unwrap_or(default_config().proxy_port.unwrap());
+  let proxy_port = config::get_config().proxy_port.unwrap_or_else(|| default_config().proxy_port.unwrap());
   let certificate_path = certificate::cert_path();
 
   let cert_path = certificate_path;
@@ -175,7 +175,7 @@ pub async fn create_proxy() {
 pub fn connect_to_proxy() {
   // Create the server string
   let config = config::get_config();
-  let proxy_port = config.proxy_port.unwrap_or(default_config().proxy_port.unwrap());
+  let proxy_port = config.proxy_port.unwrap_or_else(|| default_config().proxy_port.unwrap());
   let server = format!("http=127.0.0.1:{};https=127.0.0.1:{}", proxy_port, proxy_port);
 
   // Fetch the 'Internet Settings' registry key.
@@ -200,7 +200,7 @@ pub fn connect_to_proxy() {
 pub fn connect_to_proxy() {
   // Create the server string
   let config = config::get_config();
-  let proxy_port = config.proxy_port.unwrap_or(default_config().proxy_port.unwrap());
+  let proxy_port = config.proxy_port.unwrap_or_else(|| default_config().proxy_port.unwrap());
   let server = format!("127.0.0.1");
 
   // Set the proxy via gsettings
@@ -246,7 +246,7 @@ pub fn connect_to_proxy() {
 pub fn connect_to_proxy() {
   // Create the server string
   let config = config::get_config();
-  let proxy_port = format!("{}", config.proxy_port.unwrap_or(default_config().proxy_port.unwrap()));
+  let proxy_port = format!("{}", config.proxy_port.unwrap_or_else(|| default_config().proxy_port.unwrap()));
 
 
   // Set the proxy via networksetup
