@@ -1,0 +1,23 @@
+.CheckboxOuter {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 4px;
+  border: 2px solid var(--primary);
+  
+  height: 20px;
+  width: 20px;
+
+  padding: 2px;
+}
+
+.CheckboxOuter:hover {
+  cursor: pointer;
+}
+
+.Checkbox img {
+  height: 95%;
+  width: 95%;
+}

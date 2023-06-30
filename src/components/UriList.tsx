@@ -2,7 +2,7 @@ import { useState, useEffect } from 'preact/hooks'
 import { invoke } from '@tauri-apps/api/tauri'
 
 import './UriList.css'
-import { Textbox } from './Textbox'
+import { Textbox } from './Common/Textbox'
 
 export function UriList() {
   const [uris, setUris] = useState([] as string[])

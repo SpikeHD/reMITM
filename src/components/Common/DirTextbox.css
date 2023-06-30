@@ -1,0 +1,33 @@
+.DirTextbox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.DirTextbox .TextboxOuter {
+  width: 100%;
+
+  justify-content: flex-start;
+}
+
+.DirTextbox .Textbox {
+  text-overflow: ellipsis;
+}
+
+.DirTextboxButton {
+  height: 20px;
+  width: 20px;
+
+  position: absolute;
+  right: 42px;
+}
+
+.DirTextboxButton:hover {
+  cursor: pointer;
+}
+
+.DirTextboxButton img {
+  height: inherit;
+  width: inherit;
+}

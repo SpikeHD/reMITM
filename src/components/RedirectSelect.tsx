@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'preact/compat'
-import { Textbox } from './Textbox'
+import { Textbox } from './Common/Textbox'
 import { invoke } from '@tauri-apps/api'
 
 import './RedirectSelect.css'

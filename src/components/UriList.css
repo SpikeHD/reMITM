@@ -4,7 +4,7 @@
   align-items: center;
 
   background: transparent;
-  color: #fff;
+  color: var(--primary);
 
   text-align: center;
 
@@ -25,7 +25,7 @@
 
   border-radius: 4px;
 
-  color: #fff;
+  color: var(--primary);
 
   text-align: center;
 

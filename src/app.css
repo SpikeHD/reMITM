@@ -3,6 +3,8 @@
   --yellow: #ffa73c;
   --green: #3ece45;
 
+  --primary: #fff;
+
   --bg: #282528;
   --bg-alt: #1d1b1d;
 
@@ -15,7 +17,7 @@ body {
   background-color: var(--bg);
   font-family: 'Raleway', sans-serif;
   font-weight: bold;
-  color: #fff;
+  color: var(--primary);
 }
 
 #app {

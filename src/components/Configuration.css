@@ -12,6 +12,9 @@
   transition: transform 0.1s ease-in-out;
 
   overflow: hidden;
+
+  /* No selecting */
+  user-select: none;
 }
 
 #Configuration.hide {
@@ -42,4 +45,27 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+
+  width: 80%;
+  margin: 10px 0;
+}
+
+.ConfigurationControl {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.ConfigurationControl .TextboxOuter {
+  padding: 6px;
+  width: 50%;
+}
+
+.ConfigurationControl .Textbox {
+  text-align: center;
+}
+
+.ConfigurationRow.disabled {
+  opacity: 0.5;
 }
