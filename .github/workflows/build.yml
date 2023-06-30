@@ -34,7 +34,7 @@ jobs:
           toolchain: stable
 
       - name: Set HASH env variable as the latest git hash
-        run: for /f "delims=" %a in ('git rev-parse --short HEAD') do @set HASH=%a
+        run: $HASH=$(git rev-parse --short HEAD)
 
       - name: Install deps and build
         run: yarn && yarn build --debug
