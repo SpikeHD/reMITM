@@ -16,7 +16,7 @@ interface Props {
   class?: string
 }
 
-export function Textbox(props: Props){
+export function Textbox(props: Props) {
   const [value, setValue] = useState('')
 
   useEffect(() => {
@@ -41,7 +41,7 @@ export function Textbox(props: Props){
   }
 
   return (
-    <div class={"TextboxOuter " + (props?.class || '')}>
+    <div className={'TextboxOuter ' + (props?.class || '')}>
       <input
         type="text"
         className="Textbox"
@@ -51,15 +51,14 @@ export function Textbox(props: Props){
         onKeyPress={handleKeyPress}
         placeholder={props.placeholder}
         ref={(input) => input}
-        readonly={props.readonly !== null && props.readonly}
+        readOnly={props.readonly !== null && props.readonly}
       />
 
-      { props.onDelete && (
-        <div class="TextDelete" onClick={props.onDelete}>
+      {props.onDelete && (
+        <div className="TextDelete" onClick={props.onDelete}>
           <img src={DeleteButton} />
         </div>
       )}
     </div>
-
   )
 }

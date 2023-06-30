@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "format": "cargo fmt --manifest-path ./src-tauri/Cargo.toml --all && yarn prettier --write --cache --loglevel warn .",
     "lint": "cargo clippy --manifest-path ./src-tauri/Cargo.toml --no-default-features && yarn tsc --noEmit && yarn eslint src",
-    "lint:fix": "cargo clippy --manifest-path ./src-tauri/Cargo.toml --no-default-features --fix --allow-dirty && yarn tsc --noEmit && yarn eslint --fix src"
+    "lint:fix": "cargo clippy --manifest-path ./src-tauri/Cargo.toml --no-default-features --fix --allow-dirty && yarn tsc --noEmit && yarn eslint --fix src",
+    "pretty:fix": "prettier -c . --write"
   },
   "dependencies": {
     "@tauri-apps/api": "^1.4.0",
@@ -19,7 +20,11 @@
     "@preact/preset-vite": "^2.5.0",
     "@tauri-apps/cli": "^1.4.0",
     "@types/node": "^20.3.1",
+    "@typescript-eslint/eslint-plugin": "^5.60.1",
+    "@typescript-eslint/parser": "^5.60.1",
     "eslint": "^8.43.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-react": "^7.32.2",
     "prettier": "^2.8.8",
     "typescript": "^5.0.2",
     "vite": "^4.3.9"

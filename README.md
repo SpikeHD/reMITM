@@ -19,20 +19,23 @@ reMITM was made for one purpose: to redirect requests to other places. While it 
 # Requirements
 
 ### Windows
-* Nothing!
+
+- Nothing!
 
 ### Linux
-* Requires `libnss3-tools`
-  * Ubuntu: `sudo apt install libnss3-tools`
+
+- Requires `libnss3-tools`
+  - Ubuntu: `sudo apt install libnss3-tools`
 
 ### MacOS
-* Nothing!
+
+- Nothing!
 
 # TODO
 
-* Settings
-  * `Set in Wine`
-  * `Launch on startup`
-  * `Proxy Port`
-* Finish UI
-* "Open Terminal" button, opens with proxy env variables set (platform agnostic)
+- Settings
+  - `Set in Wine`
+  - `Launch on startup`
+  - `Proxy Port`
+- Finish UI
+- "Open Terminal" button, opens with proxy env variables set (platform agnostic)

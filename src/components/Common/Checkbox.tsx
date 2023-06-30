@@ -20,20 +20,17 @@ export function Checkbox(props: Props) {
   }, [props.defaultValue])
 
   return (
-    <div class="CheckboxOuter" onClick={() => {
-      if (props.disabled) return
+    <div
+      className="CheckboxOuter"
+      onClick={() => {
+        if (props.disabled) return
 
-      const newValue = !checked
-      setChecked(newValue)
-      props.onChange?.(newValue)
-    }}>
-      <div class="Checkbox">
-        {
-          checked && (
-            <img src={Checkmark} />
-          )
-        }
-      </div>
+        const newValue = !checked
+        setChecked(newValue)
+        props.onChange?.(newValue)
+      }}
+    >
+      <div className="Checkbox">{checked && <img src={Checkmark} />}</div>
     </div>
   )
 }

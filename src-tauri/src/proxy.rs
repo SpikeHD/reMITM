@@ -1,7 +1,7 @@
 use std::{fs, sync::Mutex};
 use std::net::SocketAddr;
-use std::path::{PathBuf};
-use std::process::Command;
+
+
 use once_cell::sync::Lazy;
 
 use hudsucker::{
@@ -77,7 +77,7 @@ impl HttpHandler for ProxyHandler {
     
     // Check if the request URI matches any of the URIs in the config
     for url in urls_to_redirect {
-      println!("Comparing {} with {}", url, uri.to_string());
+      println!("Comparing {} with {}", url, uri);
 
       if uri.to_string().contains(&url) {
         do_redirect = true;
@@ -94,7 +94,7 @@ impl HttpHandler for ProxyHandler {
     let path_and_query = req.uri().path_and_query();
     let mut new_uri = format!("{}", REDIRECT_TO.lock().unwrap());
 
-    if !path_and_query.is_none() {
+    if path_and_query.is_some() {
       new_uri = format!("{}{}", new_uri, path_and_query.unwrap());
     }
 
@@ -133,13 +133,13 @@ pub async fn create_proxy() {
   let proxy_port = config::get_config().proxy_port.unwrap_or(default_config().proxy_port.unwrap());
   let certificate_path = certificate::cert_path();
 
-  let cert_path = PathBuf::from(certificate_path);
+  let cert_path = certificate_path;
   let pk_path = cert_path.join("private.key");
   let ca_path = cert_path.join("cert.crt");
 
   // Get the certificate and private key.
-  let mut private_key_bytes: &[u8] = &fs::read(&pk_path).expect("Could not read private key");
-  let mut ca_cert_bytes: &[u8] = &fs::read(&ca_path).expect("Could not read certificate");
+  let mut private_key_bytes: &[u8] = &fs::read(pk_path).expect("Could not read private key");
+  let mut ca_cert_bytes: &[u8] = &fs::read(ca_path).expect("Could not read certificate");
 
   // Parse the private key and certificate.
   let private_key = rustls::PrivateKey(

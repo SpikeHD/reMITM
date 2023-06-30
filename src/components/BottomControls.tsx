@@ -15,7 +15,7 @@ export function BottomControls(props: Props) {
   }
 
   return (
-    <div id="BottomControls" class={props.isOn ? '' : 'hide'}>
+    <div id="BottomControls" className={props.isOn ? '' : 'hide'}>
       <span>
         <img src={TerminalIcon} onClick={openShell} />
       </span>

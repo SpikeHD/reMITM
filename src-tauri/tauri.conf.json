@@ -30,10 +30,7 @@
         "depends": []
       },
       "externalBin": [],
-      "icon": [
-        "icons/icon.png",
-        "icons/icon.ico"
-      ],
+      "icon": ["icons/icon.png", "icons/icon.ico"],
       "identifier": "com.remitm.dev",
       "longDescription": "",
       "macOS": {

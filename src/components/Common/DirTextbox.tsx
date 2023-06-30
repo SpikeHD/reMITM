@@ -44,19 +44,17 @@ export function DirTextbox(props: Props) {
   }
 
   return (
-    <div class="DirTextbox">
+    <div className="DirTextbox">
       <Textbox
         {...props}
-        class={props.class + " DirTextbox"}
-        placeholder={props.placeholder || "Enter a new directory..."}
+        class={props.class + ' DirTextbox'}
+        placeholder={props.placeholder || 'Enter a new directory...'}
         value={value}
       />
 
-      <div class="DirTextboxButton" onClick={handleIconClick}>
+      <div className="DirTextboxButton" onClick={handleIconClick}>
         <img src={File} />
       </div>
     </div>
-
-
   )
 }

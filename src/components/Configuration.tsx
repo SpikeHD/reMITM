@@ -26,25 +26,28 @@ export function Configuration(props: Props) {
     proxy_port: 0,
     terminal: '',
     modify_gsettings: false,
-    use_env_variables: false
+    use_env_variables: false,
   })
   const [hide, setHide] = useState(true)
   const [isLinux, setIsLinux] = useState(false)
-  
+
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       setHide(false)
-      setConfig( await invoke('get_config') as PartialConfig)
+      setConfig((await invoke('get_config')) as PartialConfig)
       setIsLinux((await invoke('get_platform')) === 'linux')
     })()
   }, [])
 
-  async function setConfigValue<K extends keyof Config>(key: K, value: Config[K]) {
-    const config = await invoke('get_config') as Config
+  async function setConfigValue<K extends keyof Config>(
+    key: K,
+    value: Config[K]
+  ) {
+    const config = (await invoke('get_config')) as Config
     config[key] = value
 
     await invoke('write_config', {
-      config
+      config,
     })
   }
 
@@ -69,44 +72,62 @@ export function Configuration(props: Props) {
   }
 
   return (
-    <div id="Configuration" class={hide ? 'hide' : ''}>
+    <div id="Configuration" className={hide ? 'hide' : ''}>
       <div id="ConfigurationTop">
         <img src={CloseButton} onClick={props.onClose} />
       </div>
 
       <div id="ConfigurationInner">
-        <div class="ConfigurationRow">
-          <div class="ConfigurationText">Launch on Startup</div>
-          <div class="ConfigurationControl">
-            <Checkbox defaultValue={config?.launch_at_startup} onChange={setStartup} />
+        <div className="ConfigurationRow">
+          <div className="ConfigurationText">Launch on Startup</div>
+          <div className="ConfigurationControl">
+            <Checkbox
+              defaultValue={config?.launch_at_startup}
+              onChange={setStartup}
+            />
           </div>
         </div>
 
-        <div class="ConfigurationRow">
-          <div class="ConfigurationText">Proxy Port</div>
-          <div class="ConfigurationControl PortConfig">
-            <Textbox defaultValue={config?.proxy_port.toString()} onBlur={setProxyPort} onEnter={setProxyPort} />
+        <div className="ConfigurationRow">
+          <div className="ConfigurationText">Proxy Port</div>
+          <div className="ConfigurationControl PortConfig">
+            <Textbox
+              defaultValue={config?.proxy_port.toString()}
+              onBlur={setProxyPort}
+              onEnter={setProxyPort}
+            />
           </div>
         </div>
 
-        <div class="ConfigurationRow">
-          <div class="ConfigurationText">Terminal</div>
-          <div class="ConfigurationControl">
-            <DirTextbox defaultValue={config?.terminal} onChange={setTerminal} />
+        <div className="ConfigurationRow">
+          <div className="ConfigurationText">Terminal</div>
+          <div className="ConfigurationControl">
+            <DirTextbox
+              defaultValue={config?.terminal}
+              onChange={setTerminal}
+            />
           </div>
         </div>
 
-        <div class={"ConfigurationRow " + (!isLinux && 'disabled')}>
-          <div class="ConfigurationText">Modify GSettings</div>
-          <div class="ConfigurationControl">
-            <Checkbox disabled={!isLinux} defaultValue={config?.modify_gsettings} onChange={setGsettings} />
+        <div className={'ConfigurationRow ' + (!isLinux && 'disabled')}>
+          <div className="ConfigurationText">Modify GSettings</div>
+          <div className="ConfigurationControl">
+            <Checkbox
+              disabled={!isLinux}
+              defaultValue={config?.modify_gsettings}
+              onChange={setGsettings}
+            />
           </div>
         </div>
 
-        <div class={"ConfigurationRow " + (!isLinux && 'disabled')}>
-          <div class="ConfigurationText">Use Environment Variables</div>
-          <div class="ConfigurationControl">
-            <Checkbox disabled={!isLinux} defaultValue={config?.use_env_variables} onChange={setEnvVariables} />
+        <div className={'ConfigurationRow ' + (!isLinux && 'disabled')}>
+          <div className="ConfigurationText">Use Environment Variables</div>
+          <div className="ConfigurationControl">
+            <Checkbox
+              disabled={!isLinux}
+              defaultValue={config?.use_env_variables}
+              onChange={setEnvVariables}
+            />
           </div>
         </div>
       </div>

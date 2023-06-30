@@ -9,7 +9,7 @@ export function Footer() {
   const [hash, setHash] = useState('UNKNOWN')
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       setVersion(await getVersion())
       setHash(await invoke('get_hash'))
     })()

@@ -29,8 +29,8 @@ export function OnOff(props: Props) {
 
   return (
     <div id="OnOffToggle" onClick={toggle}>
-    <span>{connectState}</span>
-      <img src={OnOffSVG} class={isOn ? 'toggled' : ''} />
+      <span>{connectState}</span>
+      <img src={OnOffSVG} className={isOn ? 'toggled' : ''} />
     </div>
   )
 }

@@ -11,12 +11,12 @@ import { Configuration } from './components/Configuration'
 import { Footer } from './components/Footer'
 
 export function App() {
-  const [isOn , setIsOn ] = useState(false)
+  const [isOn, setIsOn] = useState(false)
   const [configOpen, setConfigOpen] = useState(false)
 
   return (
     <>
-      <TopControls onSettingsClick={() => setConfigOpen(!configOpen)}/>
+      <TopControls onSettingsClick={() => setConfigOpen(!configOpen)} />
 
       <OnOff onChange={setIsOn} />
 
@@ -28,11 +28,7 @@ export function App() {
 
       <Footer />
 
-      {
-        configOpen && (
-          <Configuration onClose={() => setConfigOpen(false)} />
-        )
-      }
+      {configOpen && <Configuration onClose={() => setConfigOpen(false)} />}
     </>
   )
 }
