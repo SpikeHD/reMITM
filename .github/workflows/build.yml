@@ -89,11 +89,14 @@ jobs:
         with:
           toolchain: stable
 
+      - name: Set HASH env variable as the latest git hash
+        run: $HASH=$(git rev-parse --short HEAD)
+
       - name: Install deps and build
-        run: HASH=$(git rev-parse --short HEAD) yarn && yarn tauri build
+        run: yarn && yarn tauri build
 
       - name: Upload build
         uses: actions/upload-artifact@v3
         with:
           name: remitm_mac
-          path: src-tauri/target/release/bundle/macos/remitm.app
+          path: src-tauri/target/release/remitm
