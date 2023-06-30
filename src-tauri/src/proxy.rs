@@ -251,24 +251,29 @@ pub fn connect_to_proxy() {
   let config = config::get_config();
   let proxy_port = format!("{}", config.proxy_port.unwrap_or_else(|| default_config().proxy_port.unwrap()));
 
-
   // Set the proxy via networksetup
-  let set_proxy = Command::new("networksetup")
+  Command::new("networksetup")
     .arg("-setwebproxy")
     .arg("Wi-Fi")
     .arg("127.0.0.1")
-    .arg(proxy_port.clone());
+    .arg(proxy_port.clone())
+    .output()
+    .expect("failed to execute process");
 
-  let set_proxy = Command::new("networksetup")
+  Command::new("networksetup")
     .arg("-setsecurewebproxy")
     .arg("Wi-Fi")
     .arg("127.0.0.1")
-    .arg(proxy_port);
+    .arg(proxy_port)
+    .output()
+    .expect("failed to execute process");
 
-  let set_proxy = Command::new("networksetup")
+  Command::new("networksetup")
     .arg("-setwebproxystate")
     .arg("Wi-Fi")
-    .arg("on");
+    .arg("on")
+    .output()
+    .expect("failed to execute process");
 }
 
 #[cfg(target_os = "windows")]
@@ -316,5 +321,7 @@ pub fn disconnect_from_proxy() {
   let set_proxy = Command::new("networksetup")
     .arg("-setwebproxystate")
     .arg("Wi-Fi")
-    .arg("off");
+    .arg("off")
+    .output()
+    .expect("failed to execute process");
 }
