@@ -92,7 +92,7 @@ jobs:
           toolchain: stable
 
       - name: Set HASH env variable as the latest git hash
-        run: $HASH=$(git rev-parse --short HEAD)
+        run: export HASH=$(git rev-parse --short HEAD)
 
       - name: Install deps and build
         run: yarn && yarn tauri build
