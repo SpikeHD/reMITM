@@ -50,10 +50,7 @@ pub fn generate_ca_files(cert_dir: PathBuf) {
   match fs::create_dir(&cert_dir) {
     Ok(_) => {}
     Err(e) => {
-      print_error(format!(
-        "Error creating certificate directory: {}",
-        e
-      ));
+      print_error(format!("Error creating certificate directory: {}", e));
     }
   };
 
@@ -64,10 +61,7 @@ pub fn generate_ca_files(cert_dir: PathBuf) {
       "Wrote certificate to {}",
       cert_path.to_str().unwrap()
     )),
-    Err(e) => print_error(format!(
-      "Error creating certificate directory: {}",
-      e
-    )),
+    Err(e) => print_error(format!("Error creating certificate directory: {}", e)),
   }
 
   // Write the private key to a file.
@@ -77,10 +71,7 @@ pub fn generate_ca_files(cert_dir: PathBuf) {
       "Wrote private key to {}",
       private_key_path.to_str().unwrap()
     )),
-    Err(e) => print_error(format!(
-      "Error creating certificate directory: {}",
-      e
-    )),
+    Err(e) => print_error(format!("Error creating certificate directory: {}", e)),
   }
 
   // (Linux only) chmod to let certutil read the file
@@ -129,7 +120,7 @@ pub fn install_ca_files(path: PathBuf, app: Option<tauri::Window>) {
           "CertUtil Error",
           format!(
             "There was an error installing the certificate: \n\n{}",
-            std::str::from_utf8(&install_cert.stderr).unwrap_or_else(|_| "Unknown error")
+            std::str::from_utf8(&install_cert.stderr).unwrap_or("Unknown error")
           ),
         );
       }
