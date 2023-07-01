@@ -1,6 +1,9 @@
 use std::fs;
 use std::path::{PathBuf};
 use std::process::Command;
+use serde::Serialize;
+
+use tauri::api::dialog::message;
 
 use rcgen::*;
 
@@ -75,12 +78,21 @@ pub fn generate_ca_files(cert_dir: PathBuf) {
     ),
   }
 
+  // (Linux only) chmod to let certutil read the file
+  #[cfg(target_os = "linux")]
+  {
+    use std::os::unix::fs::PermissionsExt;
+    let mut perms = fs::metadata(&cert_path).unwrap().permissions();
+    perms.set_mode(0o777);
+    fs::set_permissions(&cert_path, perms).unwrap();
+  }
+
   // Install certificate into the system's Root CA store.
-  install_ca_files(cert_path.join("cert.crt"));
+  install_ca_files(cert_path.join("cert.crt"), None);
 }
 
 #[cfg(target_os = "windows")]
-pub fn install_ca_files(path: PathBuf) {
+pub fn install_ca_files(path: PathBuf, app: Option<tauri::Window>) {
   // Check if cert already exists
   let cert_exists = Command::new("certutil")
     .arg("-store")
@@ -106,6 +118,16 @@ pub fn install_ca_files(path: PathBuf) {
       println!("Installed certificate into Root CA store");
     } else {
       println!("Error installing certificate into Root CA store");
+      println!("{:?}", install_cert);
+      
+      // This is a special case where the user should definitely be aware of what to do next
+      if let Some(app) = app {
+        message(
+          Some(&app),
+          "CertUtil Error",
+          format!("There was an error installing the certificate: \n\n{}",std::str::from_utf8(&install_cert.stderr).unwrap_or_else(|_| "Unknown error"))
+        );
+      }
     }
   } else {
     println!("Certificate already exists in Root CA store");
@@ -113,36 +135,59 @@ pub fn install_ca_files(path: PathBuf) {
 }
 
 #[cfg(target_os = "linux")]
-pub fn install_ca_files(path: PathBuf) {
+pub fn install_ca_files(path: PathBuf, app: Option<tauri::Window>) {
+  use std::{process::Stdio, io::Write};
+
   // Check if cert already exists
   let cert_exists = Command::new("certutil")
     .arg("-d")
-    .arg("sql:$HOME/.pki/nssdb")
+    // This is kinda weird but has to be done
+    .arg(format!("sql:{}/.pki/nssdb", std::env::var("HOME").unwrap()))
     .arg("-L")
     .arg("-n")
     .arg("reMITM")
     .output()
     .expect("failed to execute process");
 
+  println!("Output of certutil: {:?}", cert_exists);
+
   if !cert_exists.status.success() {
     // Install certificate
-    let install_cert = Command::new("certutil")
+    let mut install_cert = Command::new("certutil")
       .arg("-d")
-      .arg("sql:$HOME/.pki/nssdb")
+      // Also weird but has to be done
+      .arg(format!("sql:{}/.pki/nssdb", std::env::var("HOME").unwrap()))
       .arg("-A")
       .arg("-t")
       .arg("C,,")
       .arg("-n")
       .arg("reMITM")
-      .arg("-i")
-      .arg(&path)
-      .output()
-      .expect("failed to execute process");
+      .arg("-a")
+      .stdin(Stdio::piped())
+      .spawn()
+      .unwrap();
 
-    if install_cert.status.success() {
+    let install_stdin = install_cert.stdin.as_mut().unwrap();
+    install_stdin.write_all(&fs::read(&path).unwrap()).unwrap();
+
+    drop(install_stdin);
+
+    let install_finish = install_cert.wait_with_output().unwrap();
+
+    if install_finish.status.success() {
       println!("Installed certificate into Root CA store");
     } else {
       println!("Error installing certificate into Root CA store");
+      println!("{:?}", install_finish);
+
+      // This is a special case where the user should definitely be aware of what to do next
+      if let Some(app) = app {
+        message(
+          Some(&app),
+          "CertUtil Error",
+          format!("There was an error installing the certificate: \n\n{}",std::str::from_utf8(&install_finish.stderr).unwrap_or_else(|_| "Unknown error"))
+        );
+      }
     }
   } else {
     println!("Certificate already exists in Root CA store");
@@ -150,7 +195,7 @@ pub fn install_ca_files(path: PathBuf) {
 }
 
 #[cfg(target_os = "macos")]
-pub fn install_ca_files(path: PathBuf) {
+pub fn install_ca_files(path: PathBuf, app: Option<tauri::Window>) {
   // Check if cert already exists
   let cert_exists = Command::new("security")
     .arg("find-certificate")
@@ -179,6 +224,16 @@ pub fn install_ca_files(path: PathBuf) {
       println!("Installed certificate into Root CA store");
     } else {
       println!("Error installing certificate into Root CA store");
+      println!("{:?}", install_cert);
+      
+      // This is a special case where the user should definitely be aware of what to do next
+      if let Some(app) = app {
+        message(
+          Some(&app),
+          "CertUtil Error",
+          format!("There was an error installing the certificate: \n\n{}",std::str::from_utf8(&install_cert.stderr).unwrap_or_else(|_| "Unknown error"))
+        );
+      }
     }
   } else {
     println!("Certificate already exists in Root CA store");

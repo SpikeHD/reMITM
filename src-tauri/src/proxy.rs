@@ -167,6 +167,8 @@ pub async fn create_proxy() {
 
   // Start the proxy.
   tokio::spawn(proxy.start(shutdown_signal()));
+
+  println!("Proxy process started on port {}.", proxy_port);
 }
 
 #[cfg(target_os = "windows")]
@@ -202,7 +204,7 @@ pub fn connect_to_proxy() {
   // Create the server string
   let config = config::get_config();
   let proxy_port = config.proxy_port.unwrap_or_else(|| default_config().proxy_port.unwrap());
-  let server = format!("127.0.0.1");
+  let server = format!("127.0.0.1:{}", proxy_port);
 
   // Set the proxy via gsettings
   let set_proxy = Command::new("gsettings")

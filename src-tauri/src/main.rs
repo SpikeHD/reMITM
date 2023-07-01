@@ -24,8 +24,19 @@ pub fn init() {
     println!("Generating CA files...");
     certificate::generate_ca_files(certificate::cert_path());
   }
+}
 
-  certificate::install_ca_files(crt_path.join("cert.crt"));
+#[tauri::command]
+fn install_ca_command(window: tauri::Window) {
+  let crt_path = certificate::cert_path();
+
+  // If the cert.crt doesn't exist, generate it
+  if !crt_path.join("cert.crt").exists() {
+    println!("Generating CA files...");
+    certificate::generate_ca_files(certificate::cert_path());
+  }
+
+  certificate::install_ca_files(crt_path.join("cert.crt"), Some(window));
 }
 
 fn main() {
@@ -48,6 +59,7 @@ fn main() {
       disconnect,
       get_platform,
       get_hash,
+      install_ca_command,
       config::get_config,
       config::write_config,
       proxy::set_redirect_server,

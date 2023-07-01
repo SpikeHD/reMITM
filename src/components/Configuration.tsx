@@ -12,14 +12,6 @@ interface Props {
   onClose: () => void
 }
 
-interface PartialConfig {
-  launch_at_startup: boolean
-  proxy_port: number
-  terminal: string
-  modify_gsettings: boolean
-  use_env_variables: boolean
-}
-
 export function Configuration(props: Props) {
   const [config, setConfig] = useState<PartialConfig>({
     launch_at_startup: false,

@@ -1,18 +1,25 @@
-import { useState } from 'preact/hooks'
+import { useEffect, useState } from 'preact/hooks'
+import { listen } from '@tauri-apps/api/event'
+import { dialog } from '@tauri-apps/api'
 
 import { OnOff } from './components/OnOff'
 import { RedirectSelect } from './components/RedirectSelect'
 import { UriList } from './components/UriList'
-
-import './app.css'
 import { BottomControls } from './components/BottomControls'
 import { TopControls } from './components/TopControls'
 import { Configuration } from './components/Configuration'
 import { Footer } from './components/Footer'
 
+import './app.css'
+import { invoke } from '@tauri-apps/api'
+
 export function App() {
   const [isOn, setIsOn] = useState(false)
   const [configOpen, setConfigOpen] = useState(false)
+
+  useEffect(() => {
+    invoke('install_ca_command');
+  }, [])
 
   return (
     <>
