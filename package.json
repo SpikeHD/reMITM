@@ -11,7 +11,8 @@
     "lint": "cargo clippy --manifest-path ./src-tauri/Cargo.toml --no-default-features && yarn tsc --noEmit && yarn eslint src",
     "lint:fix": "cargo clippy --manifest-path ./src-tauri/Cargo.toml --no-default-features --fix --allow-dirty && yarn tsc --noEmit && yarn eslint --fix src",
     "pretty:fix": "prettier -c . --write",
-    "fmt:fix": "cargo fmt --manifest-path ./src-tauri/Cargo.toml --all -- --config tab_spaces=2"
+    "fmt:fix": "cargo fmt --manifest-path ./src-tauri/Cargo.toml --all -- --config tab_spaces=2",
+    "fixall": "yarn fmt:fix && yarn pretty:fix && yarn lint:fix"
   },
   "dependencies": {
     "@tauri-apps/api": "^1.4.0",

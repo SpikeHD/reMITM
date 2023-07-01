@@ -52,7 +52,7 @@ pub fn generate_ca_files(cert_dir: PathBuf) {
     Err(e) => {
       print_error(format!(
         "Error creating certificate directory: {}",
-        e.to_string()
+        e
       ));
     }
   };
@@ -66,7 +66,7 @@ pub fn generate_ca_files(cert_dir: PathBuf) {
     )),
     Err(e) => print_error(format!(
       "Error creating certificate directory: {}",
-      e.to_string()
+      e
     )),
   }
 
@@ -79,7 +79,7 @@ pub fn generate_ca_files(cert_dir: PathBuf) {
     )),
     Err(e) => print_error(format!(
       "Error creating certificate directory: {}",
-      e.to_string()
+      e
     )),
   }
 
