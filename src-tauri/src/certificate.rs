@@ -1,7 +1,6 @@
 use std::fs;
 use std::path::{PathBuf};
 use std::process::Command;
-use serde::Serialize;
 
 use tauri::api::dialog::message;
 
@@ -149,8 +148,6 @@ pub fn install_ca_files(path: PathBuf, app: Option<tauri::Window>) {
     .output()
     .expect("failed to execute process");
 
-  println!("Output of certutil: {:?}", cert_exists);
-
   if !cert_exists.status.success() {
     // Install certificate
     let mut install_cert = Command::new("certutil")
@@ -167,10 +164,9 @@ pub fn install_ca_files(path: PathBuf, app: Option<tauri::Window>) {
       .spawn()
       .unwrap();
 
-    let install_stdin = install_cert.stdin.as_mut().unwrap();
-    install_stdin.write_all(&fs::read(&path).unwrap()).unwrap();
-
-    drop(install_stdin);
+    if let Some(mut stdin) = install_cert.stdin.take() {
+      stdin.write_all(&fs::read(path).unwrap()).unwrap();
+    }
 
     let install_finish = install_cert.wait_with_output().unwrap();
 
@@ -185,7 +181,7 @@ pub fn install_ca_files(path: PathBuf, app: Option<tauri::Window>) {
         message(
           Some(&app),
           "CertUtil Error",
-          format!("There was an error installing the certificate: \n\n{}",std::str::from_utf8(&install_finish.stderr).unwrap_or_else(|_| "Unknown error"))
+          format!("There was an error installing the certificate: \n\n{}", std::str::from_utf8(&install_finish.stderr).unwrap_or("Unknown error"))
         );
       }
     }

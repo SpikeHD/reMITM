@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'preact/hooks'
-import { listen } from '@tauri-apps/api/event'
-import { dialog } from '@tauri-apps/api'
 
 import { OnOff } from './components/OnOff'
 import { RedirectSelect } from './components/RedirectSelect'
