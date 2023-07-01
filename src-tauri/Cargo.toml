@@ -28,6 +28,8 @@ tokio = { version = "1.28.2", features = ["signal"] }
 registry = "1.2.3"
 is_elevated = "0.1.2"
 open = "5.0.0"
+colored = "2.0.0"
+chrono = "0.4.26"
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem and the built-in dev server is disabled.

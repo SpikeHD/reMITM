@@ -17,6 +17,7 @@ use registry::{Data, Hive, Security};
 
 use crate::config::default_config;
 use crate::{config, certificate};
+use crate::log::{print_error, print_info};
 
 // Globally store the server we are redirecting to
 static REDIRECT_TO: Lazy<Mutex<String>> = Lazy::new(|| Mutex::new(default_config().redirect_to.unwrap()));
@@ -76,7 +77,7 @@ impl HttpHandler for ProxyHandler {
     
     // Check if the request URI matches any of the URIs in the config
     for url in urls_to_redirect {
-      println!("Comparing {} with {}", url, uri);
+      print_info(format!("Comparing {} with {}", url, uri));
 
       if uri.to_string().contains(&url) {
         do_redirect = true;
@@ -88,7 +89,7 @@ impl HttpHandler for ProxyHandler {
       return req.into();
     }
 
-    println!("Found URI to redirect: {}", req.uri());
+    print_info(format!("Found URI to redirect: {}", req.uri()));
 
     let path_and_query = req.uri().path_and_query();
     let mut new_uri = format!("{}", REDIRECT_TO.lock().unwrap());
@@ -97,7 +98,7 @@ impl HttpHandler for ProxyHandler {
       new_uri = format!("{}{}", new_uri, path_and_query.unwrap());
     }
 
-    println!("Redirecting to {}...", new_uri);
+    print_info(format!("Redirecting to {}...", new_uri));
 
     *req.uri_mut() = new_uri.parse().unwrap();
 
@@ -122,7 +123,7 @@ pub fn set_redirect_server(server: String) {
   config.redirect_to = Some(server);
   config::write_config(config);  
 
-  println!("Redirecting requests to: {}", REDIRECT_TO.lock().unwrap());
+  print_info(format!("Redirecting requests to: {}", REDIRECT_TO.lock().unwrap()));
 }
 
 /**
@@ -168,7 +169,7 @@ pub async fn create_proxy() {
   // Start the proxy.
   tokio::spawn(proxy.start(shutdown_signal()));
 
-  println!("Proxy process started on port {}.", proxy_port);
+  print_info(format!("Proxy process started on port {}.", proxy_port));
 }
 
 #[cfg(target_os = "windows")]
@@ -193,7 +194,7 @@ pub fn connect_to_proxy() {
     .unwrap();
   settings.set_value("ProxyEnable", &Data::U32(1)).unwrap();
 
-  println!("Connected to the proxy.");
+  print_info(format!("Connected to proxy: {}", ));
 }
 
 #[cfg(target_os = "linux")]
@@ -221,7 +222,7 @@ pub fn connect_to_proxy() {
     .output()
     .expect("failed to execute process");
 
-  println!("Set http proxy: {}", set_proxy.status);
+  print_info(format!("Set http proxy: {}", set_proxy.status));
 
   // Set https proxy as well
   let set_proxy = Command::new("gsettings")
@@ -232,7 +233,7 @@ pub fn connect_to_proxy() {
     .output()
     .expect("failed to execute process");
 
-  println!("Set https proxy: {}", set_proxy.status);
+    print_info(format!("Set https proxy: {}", set_proxy.status));
 
   // Set proxy mode to manual
   let set_proxy = Command::new("gsettings")
@@ -243,10 +244,10 @@ pub fn connect_to_proxy() {
     .output()
     .expect("failed to execute process");
 
-  println!("Set proxy mode: {}", set_proxy.status);
+  print_info(format!("Set proxy mode: {}", set_proxy.status));
 
   if !set_proxy.status.success() {
-    println!("Failed to set proxy: {}", set_proxy.status);
+    print_error(format!("Failed to set proxy: {}", set_proxy.status));
   }
 }
 
@@ -298,7 +299,7 @@ pub fn disconnect_from_proxy() {
   // Set registry values.
   settings.set_value("ProxyEnable", &Data::U32(0)).unwrap();
 
-  println!("Disconnected from the proxy.");
+  print_info("Disconnected from the proxy.".to_string());
 }
 
 #[cfg(target_os = "linux")]
@@ -316,7 +317,7 @@ pub fn disconnect_from_proxy() {
     .expect("failed to execute process");
 
   if !set_proxy.status.success() {
-    println!("Failed to set proxy: {}", set_proxy.status);
+    print_error(format!("Failed to set proxy: {}", set_proxy.status));
   }
 }
 

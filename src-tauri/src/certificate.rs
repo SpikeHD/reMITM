@@ -6,6 +6,8 @@ use tauri::api::dialog::message;
 
 use rcgen::*;
 
+use crate::log::{print_error, print_info};
+
 pub fn cert_path() -> PathBuf {
   let mut path = dirs::config_dir().unwrap();
   path.push("reMITM");
@@ -48,33 +50,33 @@ pub fn generate_ca_files(cert_dir: PathBuf) {
   match fs::create_dir(&cert_dir) {
     Ok(_) => {}
     Err(e) => {
-      println!("{}", e);
+      print_error(format!(
+        "Error creating certificate directory: {}",
+        e.to_string()
+      ));
     }
   };
 
   // Write the certificate to a file.
   let cert_path = cert_dir.join("cert.crt");
   match fs::write(&cert_path, cert_crt) {
-    Ok(_) => println!("Wrote certificate to {}", cert_path.to_str().unwrap()),
-    Err(e) => println!(
-      "Error writing certificate to {}: {}",
-      cert_path.to_str().unwrap(),
-      e
-    ),
+    Ok(_) => print_info(format!("Wrote certificate to {}", cert_path.to_str().unwrap())),
+    Err(e) => print_error(format!(
+      "Error creating certificate directory: {}",
+      e.to_string()
+    )),
   }
 
   // Write the private key to a file.
   let private_key_path = cert_dir.join("private.key");
   match fs::write(&private_key_path, private_key) {
-    Ok(_) => println!(
-      "Wrote private key to {}",
-      private_key_path.to_str().unwrap()
+    Ok(_) => print_info(
+      format!("Wrote private key to {}", private_key_path.to_str().unwrap())
     ),
-    Err(e) => println!(
-      "Error writing private key to {}: {}",
-      private_key_path.to_str().unwrap(),
-      e
-    ),
+    Err(e) => print_error(format!(
+      "Error creating certificate directory: {}",
+      e.to_string()
+    )),
   }
 
   // (Linux only) chmod to let certutil read the file
@@ -101,8 +103,6 @@ pub fn install_ca_files(path: PathBuf, app: Option<tauri::Window>) {
     .output()
     .expect("failed to execute process");
 
-  println!("{:?}", cert_exists);
-
   if !cert_exists.status.success() {
     // Install certificate
     let install_cert = Command::new("certutil")
@@ -114,10 +114,9 @@ pub fn install_ca_files(path: PathBuf, app: Option<tauri::Window>) {
       .expect("failed to execute process");
 
     if install_cert.status.success() {
-      println!("Installed certificate into Root CA store");
+      print_info("Installed certificate into Root CA store".to_string());
     } else {
-      println!("Error installing certificate into Root CA store");
-      println!("{:?}", install_cert);
+      print_error("Error installing certificate into Root CA store".to_string());
       
       // This is a special case where the user should definitely be aware of what to do next
       if let Some(app) = app {
@@ -129,7 +128,7 @@ pub fn install_ca_files(path: PathBuf, app: Option<tauri::Window>) {
       }
     }
   } else {
-    println!("Certificate already exists in Root CA store");
+    print_info("Certificate already exists in Root CA store".to_string());
   }
 }
 
@@ -171,10 +170,10 @@ pub fn install_ca_files(path: PathBuf, app: Option<tauri::Window>) {
     let install_finish = install_cert.wait_with_output().unwrap();
 
     if install_finish.status.success() {
-      println!("Installed certificate into Root CA store");
+      print_info("Installed certificate into Root CA store".to_string());
     } else {
-      println!("Error installing certificate into Root CA store");
-      println!("{:?}", install_finish);
+      print_error("Error installing certificate into Root CA store".to_string());
+      print_error(format!("{:?}", install_finish));
 
       // This is a special case where the user should definitely be aware of what to do next
       if let Some(app) = app {
@@ -186,7 +185,7 @@ pub fn install_ca_files(path: PathBuf, app: Option<tauri::Window>) {
       }
     }
   } else {
-    println!("Certificate already exists in Root CA store");
+    print_info("Certificate already exists in Root CA store".to_string());
   }
 }
 
@@ -217,10 +216,10 @@ pub fn install_ca_files(path: PathBuf, app: Option<tauri::Window>) {
       .expect("failed to execute process");
 
     if install_cert.status.success() {
-      println!("Installed certificate into Root CA store");
+      print_info("Installed certificate into Root CA store".to_string())
     } else {
-      println!("Error installing certificate into Root CA store");
-      println!("{:?}", install_cert);
+      print_error("Error installing certificate into Root CA store".to_string());
+      print_error(format!("{:?}", install_cert));
       
       // This is a special case where the user should definitely be aware of what to do next
       if let Some(app) = app {
@@ -232,6 +231,6 @@ pub fn install_ca_files(path: PathBuf, app: Option<tauri::Window>) {
       }
     }
   } else {
-    println!("Certificate already exists in Root CA store");
+    print_info("Certificate already exists in Root CA store".to_string());
   }
 }

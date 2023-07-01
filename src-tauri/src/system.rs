@@ -1,10 +1,12 @@
 use std::process::{exit, Command};
 
+use crate::log::{print_info};
+
 #[cfg(windows)]
 pub fn reopen_as_admin() {
   let install = std::env::current_exe().unwrap();
 
-  println!("Opening as admin: {}", install.to_str().unwrap());
+  print_info(format!("Opening as admin: {}", install.to_str().unwrap()));
 
   Command::new("powershell.exe")
     .arg("powershell")
@@ -22,7 +24,7 @@ pub fn reopen_as_admin() {
 pub fn _reopen_as_admin() {
   let install = std::env::current_exe().unwrap();
 
-  println!("Opening as root: {}", install.to_str().unwrap());
+  print_info(format!("Opening as root: {}", install.to_str().unwrap()));
 
   Command::new("sudo")
     .arg(install.to_str().unwrap())
@@ -36,7 +38,7 @@ pub fn _reopen_as_admin() {
 pub fn _reopen_as_admin() {
   let install = std::env::current_exe().unwrap();
 
-  println!("Opening as root: {}", install.to_str().unwrap());
+  print_info(format!("Opening as root: {}", install.to_str().unwrap()));
 
   Command::new("sudo")
     .arg(install.to_str().unwrap())

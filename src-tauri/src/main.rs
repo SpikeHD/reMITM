@@ -2,10 +2,12 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use config::{init_config, default_config};
+use log::print_info;
 use proxy::{set_redirect_server};
 
 mod certificate;
 mod config;
+mod log;
 mod matcher;
 mod proxy;
 mod system;
@@ -15,13 +17,24 @@ mod tools;
  * Ensures config path and file exists
  */
 pub fn init() {
+  // Create data_dir/reMITM if it doesn't exist
+  let mut data_dir = dirs::data_dir().unwrap();
+  data_dir.push("reMITM");
+  if !data_dir.exists() {
+    std::fs::create_dir(&data_dir).unwrap();
+  }
+
+  let pretty_date = chrono::Local::now().format("%Y-%m-%d %H:%M:%S").to_string();
+
+  print_info(format!("== Initializing {} ==", pretty_date));
+
   init_config();
 
   let crt_path = certificate::cert_path();
 
   // If the cert.crt doesn't exist, generate it
   if !crt_path.join("cert.crt").exists() {
-    println!("Generating CA files...");
+    print_info("Generating CA files...".to_string());
     certificate::generate_ca_files(certificate::cert_path());
   }
 }
@@ -32,7 +45,7 @@ fn install_ca_command(window: tauri::Window) {
 
   // If the cert.crt doesn't exist, generate it
   if !crt_path.join("cert.crt").exists() {
-    println!("Generating CA files...");
+    print_info("Generating CA files...".to_string());
     certificate::generate_ca_files(certificate::cert_path());
   }
 
@@ -71,7 +84,7 @@ fn main() {
 
 #[tauri::command]
 async fn connect() {
-  println!("Connecting...");
+  print_info("Connecting...".to_string());
 
   proxy::connect_to_proxy();
   proxy::create_proxy().await;
@@ -79,7 +92,7 @@ async fn connect() {
 
 #[tauri::command]
 fn disconnect() {
-  println!("Disconnecting...");
+  print_info("Disconnecting...".to_string());
   proxy::disconnect_from_proxy();
 }
 
