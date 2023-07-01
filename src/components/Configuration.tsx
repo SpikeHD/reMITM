@@ -21,13 +21,13 @@ export function Configuration(props: Props) {
     use_env_variables: false,
   })
   const [hide, setHide] = useState(true)
-  const [isLinux, setIsLinux] = useState(false)
+  const [platform, setPlatform] = useState('windows')
 
   useEffect(() => {
     ;(async () => {
       setHide(false)
       setConfig((await invoke('get_config')) as PartialConfig)
-      setIsLinux((await invoke('get_platform')) === 'linux')
+      setPlatform((await invoke('get_platform')) )
     })()
   }, [])
 
@@ -101,22 +101,22 @@ export function Configuration(props: Props) {
           </div>
         </div>
 
-        <div className={'ConfigurationRow ' + (!isLinux && 'disabled')}>
+        <div className={'ConfigurationRow ' + (platform === 'linux' && 'disabled')}>
           <div className="ConfigurationText">Modify GSettings</div>
           <div className="ConfigurationControl">
             <Checkbox
-              disabled={!isLinux}
+              disabled={platform === 'linux'}
               defaultValue={config?.modify_gsettings}
               onChange={setGsettings}
             />
           </div>
         </div>
 
-        <div className={'ConfigurationRow ' + (!isLinux && 'disabled')}>
+        <div className={'ConfigurationRow ' + (platform !== 'windows' && 'disabled')}>
           <div className="ConfigurationText">Use Environment Variables</div>
           <div className="ConfigurationControl">
             <Checkbox
-              disabled={!isLinux}
+              disabled={platform !== 'windows'}
               defaultValue={config?.use_env_variables}
               onChange={setEnvVariables}
             />

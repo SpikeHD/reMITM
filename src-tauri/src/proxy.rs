@@ -206,6 +206,12 @@ pub fn connect_to_proxy() {
   let proxy_port = config.proxy_port.unwrap_or_else(|| default_config().proxy_port.unwrap());
   let server = format!("127.0.0.1:{}", proxy_port);
 
+  // If we don't want to modify gsettings, just return.
+  // We will still set env variables in terminal unless that's disabled too
+  if !config.modify_gsettings.unwrap_or_else(|| default_config().modify_gsettings.unwrap()) {
+    return;
+  }
+
   // Set the proxy via gsettings
   let set_proxy = Command::new("gsettings")
     .arg("set")

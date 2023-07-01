@@ -39,7 +39,7 @@ pub fn default_config() -> Config {
 
     // On linux you may want to enable using http(s)_proxy env variables and/or gsettings
     #[cfg(target_os = "linux")]
-    modify_gsettings: Some(true),
+    modify_gsettings: Some(false),
     #[cfg(target_os = "linux")]
     use_env_variables: Some(true),
 
