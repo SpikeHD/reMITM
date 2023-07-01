@@ -18,7 +18,7 @@ static LOG_FILE: Lazy<Mutex<File>> = Lazy::new(||
 
 pub fn append_logfile(message: String) {
   let mut file = LOG_FILE.lock().unwrap();
-  file.write(format!("{}\n", message).as_bytes()).unwrap();
+  file.write_all(format!("{}\n", message).as_bytes()).unwrap();
 }
 
 pub fn print_pretty(kind: String, message: String) {
