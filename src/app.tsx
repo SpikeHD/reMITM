@@ -16,7 +16,7 @@ export function App() {
   const [configOpen, setConfigOpen] = useState(false)
 
   useEffect(() => {
-    invoke('install_ca_command');
+    invoke('install_ca_command')
   }, [])
 
   return (

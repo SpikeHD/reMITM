@@ -23,13 +23,16 @@ reMITM was made for one purpose: to redirect requests to other places. While ~~i
 # Requirements
 
 ### Windows
+
 - Nothing!
 
 ### Linux
+
 - Requires `libnss3-tools` for certificate generation.
   - Ubuntu: `sudo apt install libnss3-tools`
 
 ### MacOS
+
 - Nothing!
 
 # Setup
@@ -44,4 +47,5 @@ Download a release build [from here](https://github.com/SpikeHD/reMITM/releases)
 - Make all settings actually do something
 
 # Contributing
+
 Issues, pull requests, etc. are all welcome!

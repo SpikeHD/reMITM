@@ -27,7 +27,7 @@ export function Configuration(props: Props) {
     ;(async () => {
       setHide(false)
       setConfig((await invoke('get_config')) as PartialConfig)
-      setPlatform((await invoke('get_platform')))
+      setPlatform(await invoke('get_platform'))
 
       console.log('Platform: ' + platform)
     })()
@@ -103,7 +103,9 @@ export function Configuration(props: Props) {
           </div>
         </div>
 
-        <div className={'ConfigurationRow ' + (platform !== 'linux' && 'disabled')}>
+        <div
+          className={'ConfigurationRow ' + (platform !== 'linux' && 'disabled')}
+        >
           <div className="ConfigurationText">Modify GSettings</div>
           <div className="ConfigurationControl">
             <Checkbox
@@ -114,7 +116,11 @@ export function Configuration(props: Props) {
           </div>
         </div>
 
-        <div className={'ConfigurationRow ' + (platform === 'windows' && 'disabled')}>
+        <div
+          className={
+            'ConfigurationRow ' + (platform === 'windows' && 'disabled')
+          }
+        >
           <div className="ConfigurationText">Use Environment Variables</div>
           <div className="ConfigurationControl">
             <Checkbox
