@@ -209,7 +209,7 @@ pub fn connect_to_proxy() {
     .unwrap();
   settings.set_value("ProxyEnable", &Data::U32(1)).unwrap();
 
-  print_info(format!("Connected to proxy: {}",));
+  print_info(format!("Connected to proxy: {}", server));
 }
 
 #[cfg(target_os = "linux")]
