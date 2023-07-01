@@ -14,7 +14,7 @@
 
 [View an overview here!](https://spikehd.github.io/projects/reMITM)
 
-reMITM was made for one purpose: to redirect requests to other places. While ~~it allows you to log network traffic~~, this isn't really intended to be a debugger. Rather, it's use comes from it's ease of configuration for simply redirecting network traffic to other places (such as `localhost`, if you are intending on modifying/monitoring the traffic).
+reMITM was made for one purpose: to redirect requests to other places. While ~~it allows you to log network traffic~~, this isn't really intended to be a debugger. Rather, it's use comes from it's ease of configuration for simply redirecting network traffic to other places (such as `localhost`, if you are intending on consuming/monitoring the traffic).
 
 <div align="center">
   <img src="https://github.com/SpikeHD/reMITM/assets/25207995/47166174-823c-4bf2-8b5c-1b1b29beff11" />
@@ -23,16 +23,13 @@ reMITM was made for one purpose: to redirect requests to other places. While ~~i
 # Requirements
 
 ### Windows
-
 - Nothing!
 
 ### Linux
-
-- Requires `libnss3-tools` for certificate generation.
-  - Ubuntu: `sudo apt install libnss3-tools`
+- `libnss3-tools`
+- `gsettings` (optional)
 
 ### MacOS
-
 - Nothing!
 
 # Setup
@@ -41,10 +38,9 @@ Download a release build [from here](https://github.com/SpikeHD/reMITM/releases)
 
 # TODO
 
-- Settings
-  - `Set in Wine` (this is handle by environment variables, so the shell opening button should be enough)
+- Make setting env variables in terminal work (add setting to set whatever `.bashrc`-type file is used?)
 - Make UI a little fancier
-- Make all settings actually do something
+- Make Linux and MacOS more stable
 
 # Contributing
 
