@@ -15,8 +15,6 @@ export function Checkbox(props: Props) {
 
   useEffect(() => {
     setChecked(props.defaultValue || false)
-
-    console.log('Is checked? ', props.defaultValue)
   }, [props.defaultValue])
 
   return (
