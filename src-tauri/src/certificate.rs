@@ -1,5 +1,5 @@
 use std::fs;
-use std::path::{PathBuf};
+use std::path::PathBuf;
 use std::process::Command;
 
 use tauri::api::dialog::message;
@@ -60,7 +60,10 @@ pub fn generate_ca_files(cert_dir: PathBuf) {
   // Write the certificate to a file.
   let cert_path = cert_dir.join("cert.crt");
   match fs::write(&cert_path, cert_crt) {
-    Ok(_) => print_info(format!("Wrote certificate to {}", cert_path.to_str().unwrap())),
+    Ok(_) => print_info(format!(
+      "Wrote certificate to {}",
+      cert_path.to_str().unwrap()
+    )),
     Err(e) => print_error(format!(
       "Error creating certificate directory: {}",
       e.to_string()
@@ -70,9 +73,10 @@ pub fn generate_ca_files(cert_dir: PathBuf) {
   // Write the private key to a file.
   let private_key_path = cert_dir.join("private.key");
   match fs::write(&private_key_path, private_key) {
-    Ok(_) => print_info(
-      format!("Wrote private key to {}", private_key_path.to_str().unwrap())
-    ),
+    Ok(_) => print_info(format!(
+      "Wrote private key to {}",
+      private_key_path.to_str().unwrap()
+    )),
     Err(e) => print_error(format!(
       "Error creating certificate directory: {}",
       e.to_string()
@@ -117,13 +121,16 @@ pub fn install_ca_files(path: PathBuf, app: Option<tauri::Window>) {
       print_info("Installed certificate into Root CA store".to_string());
     } else {
       print_error("Error installing certificate into Root CA store".to_string());
-      
+
       // This is a special case where the user should definitely be aware of what to do next
       if let Some(app) = app {
         message(
           Some(&app),
           "CertUtil Error",
-          format!("There was an error installing the certificate: \n\n{}",std::str::from_utf8(&install_cert.stderr).unwrap_or_else(|_| "Unknown error"))
+          format!(
+            "There was an error installing the certificate: \n\n{}",
+            std::str::from_utf8(&install_cert.stderr).unwrap_or_else(|_| "Unknown error")
+          ),
         );
       }
     }
@@ -134,7 +141,7 @@ pub fn install_ca_files(path: PathBuf, app: Option<tauri::Window>) {
 
 #[cfg(target_os = "linux")]
 pub fn install_ca_files(path: PathBuf, app: Option<tauri::Window>) {
-  use std::{process::Stdio, io::Write};
+  use std::{io::Write, process::Stdio};
 
   // Check if cert already exists
   let cert_exists = Command::new("certutil")
@@ -180,7 +187,10 @@ pub fn install_ca_files(path: PathBuf, app: Option<tauri::Window>) {
         message(
           Some(&app),
           "CertUtil Error",
-          format!("There was an error installing the certificate: \n\n{}", std::str::from_utf8(&install_finish.stderr).unwrap_or("Unknown error"))
+          format!(
+            "There was an error installing the certificate: \n\n{}",
+            std::str::from_utf8(&install_finish.stderr).unwrap_or("Unknown error")
+          ),
         );
       }
     }
@@ -220,13 +230,16 @@ pub fn install_ca_files(path: PathBuf, app: Option<tauri::Window>) {
     } else {
       print_error("Error installing certificate into Root CA store".to_string());
       print_error(format!("{:?}", install_cert));
-      
+
       // This is a special case where the user should definitely be aware of what to do next
       if let Some(app) = app {
         message(
           Some(&app),
           "CertUtil Error",
-          format!("There was an error installing the certificate: \n\n{}",std::str::from_utf8(&install_cert.stderr).unwrap_or_else(|_| "Unknown error"))
+          format!(
+            "There was an error installing the certificate: \n\n{}",
+            std::str::from_utf8(&install_cert.stderr).unwrap_or_else(|_| "Unknown error")
+          ),
         );
       }
     }

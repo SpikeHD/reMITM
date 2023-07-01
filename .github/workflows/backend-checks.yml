@@ -24,7 +24,7 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: fmt
-          args: --manifest-path ./src-tauri/Cargo.toml --all -- --check
+          args: cargo fmt --manifest-path ./ src-tauri/Cargo.toml --all -- --config tab_spaces=2 --check
 
   clippy:
     runs-on: ${{ matrix.platform }}

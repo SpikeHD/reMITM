@@ -1,9 +1,9 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use config::{init_config, default_config};
+use config::{default_config, init_config};
 use log::print_info;
-use proxy::{set_redirect_server};
+use proxy::set_redirect_server;
 
 mod certificate;
 mod config;
@@ -62,9 +62,13 @@ fn main() {
   init();
 
   let config = config::get_config();
-  
+
   // set redirect to via config
-  set_redirect_server(config.redirect_to.unwrap_or_else(|| default_config().redirect_to.unwrap()));
+  set_redirect_server(
+    config
+      .redirect_to
+      .unwrap_or_else(|| default_config().redirect_to.unwrap()),
+  );
 
   tauri::Builder::default()
     .invoke_handler(tauri::generate_handler![

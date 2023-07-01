@@ -1,6 +1,5 @@
-
 use serde::{Deserialize, Serialize};
-use std::{fs};
+use std::fs;
 use std::path::PathBuf;
 
 #[derive(Deserialize, Serialize, Clone)]
@@ -64,7 +63,7 @@ pub fn get_config() -> Config {
     // Try to read from the config cache, if it's not there read from the file
     if CONFIG.is_none() {
       let path = config_path();
-  
+
       if path.exists() {
         let contents = fs::read_to_string(path).unwrap();
         serde_json::from_str(&contents).unwrap()

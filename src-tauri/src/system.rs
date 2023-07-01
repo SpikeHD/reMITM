@@ -1,6 +1,6 @@
 use std::process::{exit, Command};
 
-use crate::log::{print_info};
+use crate::log::print_info;
 
 #[cfg(windows)]
 pub fn reopen_as_admin() {

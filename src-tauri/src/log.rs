@@ -1,20 +1,20 @@
 use colored::Colorize;
 use dirs::data_dir;
-use std::fs::{OpenOptions, File};
+use once_cell::sync::Lazy;
+use std::fs::{File, OpenOptions};
 use std::io::Write;
 use std::sync::Mutex;
-use once_cell::sync::Lazy;
 
 // Open a global filestream to write to
-static LOG_FILE: Lazy<Mutex<File>> = Lazy::new(||
+static LOG_FILE: Lazy<Mutex<File>> = Lazy::new(|| {
   Mutex::new(
     OpenOptions::new()
       .append(true)
       .create(true)
       .open(data_dir().unwrap().join("reMITM").join("log.txt"))
-      .unwrap()
+      .unwrap(),
   )
-);
+});
 
 pub fn append_logfile(message: String) {
   let mut file = LOG_FILE.lock().unwrap();

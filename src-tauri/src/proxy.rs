@@ -1,5 +1,5 @@
-use std::{fs, sync::Mutex};
 use std::net::SocketAddr;
+use std::{fs, sync::Mutex};
 
 use once_cell::sync::Lazy;
 
@@ -16,11 +16,12 @@ use rustls_pemfile as pemfile;
 use registry::{Data, Hive, Security};
 
 use crate::config::default_config;
-use crate::{config, certificate};
 use crate::log::{print_error, print_info};
+use crate::{certificate, config};
 
 // Globally store the server we are redirecting to
-static REDIRECT_TO: Lazy<Mutex<String>> = Lazy::new(|| Mutex::new(default_config().redirect_to.unwrap()));
+static REDIRECT_TO: Lazy<Mutex<String>> =
+  Lazy::new(|| Mutex::new(default_config().redirect_to.unwrap()));
 
 async fn shutdown_signal() {
   tokio::signal::ctrl_c()
@@ -36,7 +37,9 @@ impl HttpHandler for ProxyHandler {
   async fn should_intercept(&mut self, _ctx: &HttpContext, req: &Request<Body>) -> bool {
     // Get URIs from config
     let config = config::get_config();
-    let urls_to_redirect = config.urls_to_redirect.unwrap_or_else(|| default_config().urls_to_redirect.unwrap());
+    let urls_to_redirect = config
+      .urls_to_redirect
+      .unwrap_or_else(|| default_config().urls_to_redirect.unwrap());
 
     // Get the request URI
     let uri = req.uri().clone();
@@ -50,7 +53,7 @@ impl HttpHandler for ProxyHandler {
 
     false
   }
-    
+
   async fn handle_request(
     &mut self,
     _ctx: &HttpContext,
@@ -69,12 +72,14 @@ impl HttpHandler for ProxyHandler {
 
     // Get URIs from config
     let config = config::get_config();
-    let urls_to_redirect = config.urls_to_redirect.unwrap_or_else(|| default_config().urls_to_redirect.unwrap());
-    
+    let urls_to_redirect = config
+      .urls_to_redirect
+      .unwrap_or_else(|| default_config().urls_to_redirect.unwrap());
+
     // Get the request URI
     let uri = req.uri().clone();
     let mut do_redirect = false;
-    
+
     // Check if the request URI matches any of the URIs in the config
     for url in urls_to_redirect {
       print_info(format!("Comparing {} with {}", url, uri));
@@ -121,16 +126,21 @@ pub fn set_redirect_server(server: String) {
   // Set in config
   let mut config = config::get_config();
   config.redirect_to = Some(server);
-  config::write_config(config);  
+  config::write_config(config);
 
-  print_info(format!("Redirecting requests to: {}", REDIRECT_TO.lock().unwrap()));
+  print_info(format!(
+    "Redirecting requests to: {}",
+    REDIRECT_TO.lock().unwrap()
+  ));
 }
 
 /**
  * Starts the HTTP(S) proxy server.
  */
 pub async fn create_proxy() {
-  let proxy_port = config::get_config().proxy_port.unwrap_or_else(|| default_config().proxy_port.unwrap());
+  let proxy_port = config::get_config()
+    .proxy_port
+    .unwrap_or_else(|| default_config().proxy_port.unwrap());
   let certificate_path = certificate::cert_path();
 
   let cert_path = certificate_path;
@@ -177,8 +187,13 @@ pub async fn create_proxy() {
 pub fn connect_to_proxy() {
   // Create the server string
   let config = config::get_config();
-  let proxy_port = config.proxy_port.unwrap_or_else(|| default_config().proxy_port.unwrap());
-  let server = format!("http=127.0.0.1:{};https=127.0.0.1:{}", proxy_port, proxy_port);
+  let proxy_port = config
+    .proxy_port
+    .unwrap_or_else(|| default_config().proxy_port.unwrap());
+  let server = format!(
+    "http=127.0.0.1:{};https=127.0.0.1:{}",
+    proxy_port, proxy_port
+  );
 
   // Fetch the 'Internet Settings' registry key.
   let settings = Hive::CurrentUser
@@ -194,7 +209,7 @@ pub fn connect_to_proxy() {
     .unwrap();
   settings.set_value("ProxyEnable", &Data::U32(1)).unwrap();
 
-  print_info(format!("Connected to proxy: {}", ));
+  print_info(format!("Connected to proxy: {}",));
 }
 
 #[cfg(target_os = "linux")]
@@ -204,12 +219,17 @@ pub fn connect_to_proxy() {
 
   // Create the server string
   let config = config::get_config();
-  let proxy_port = config.proxy_port.unwrap_or_else(|| default_config().proxy_port.unwrap());
+  let proxy_port = config
+    .proxy_port
+    .unwrap_or_else(|| default_config().proxy_port.unwrap());
   let server = format!("127.0.0.1:{}", proxy_port);
 
   // If we don't want to modify gsettings, just return.
   // We will still set env variables in terminal unless that's disabled too
-  if !config.modify_gsettings.unwrap_or_else(|| default_config().modify_gsettings.unwrap()) {
+  if !config
+    .modify_gsettings
+    .unwrap_or_else(|| default_config().modify_gsettings.unwrap())
+  {
     return;
   }
 
@@ -233,7 +253,7 @@ pub fn connect_to_proxy() {
     .output()
     .expect("failed to execute process");
 
-    print_info(format!("Set https proxy: {}", set_proxy.status));
+  print_info(format!("Set https proxy: {}", set_proxy.status));
 
   // Set proxy mode to manual
   let set_proxy = Command::new("gsettings")
@@ -258,7 +278,12 @@ pub fn connect_to_proxy() {
 
   // Create the server string
   let config = config::get_config();
-  let proxy_port = format!("{}", config.proxy_port.unwrap_or_else(|| default_config().proxy_port.unwrap()));
+  let proxy_port = format!(
+    "{}",
+    config
+      .proxy_port
+      .unwrap_or_else(|| default_config().proxy_port.unwrap())
+  );
 
   // Set the proxy via networksetup
   Command::new("networksetup")
