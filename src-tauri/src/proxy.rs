@@ -352,14 +352,17 @@ pub fn disconnect_from_proxy() {
   use std::process::Command;
 
   // Set the proxy via networksetup
-  let set_proxy = Command::new("networksetup")
+  Command::new("networksetup")
     .arg("-setwebproxystate")
     .arg("Wi-Fi")
     .arg("off")
     .output()
     .expect("failed to execute process");
 
-  if !set_proxy.status.success() {
-    print_error(format!("Failed to set proxy: {}", set_proxy.status));
-  }
+  Command::new("networksetup")
+    .arg("-setsecurewebproxystate")
+    .arg("Wi-Fi")
+    .arg("off")
+    .output()
+    .expect("failed to execute process");
 }
