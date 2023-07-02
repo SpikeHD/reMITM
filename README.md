@@ -10,6 +10,17 @@
   </div>
 </div>
 
+# Table of Contents
+
+* [Introduction](#introduction)
+* [Requirements](#requirements)
+  * [Windows](#windows)
+  * [Linux](#linux)
+  * [MacOS](#macos)
+* [Setup](#setup)
+* [TODO](#todo)
+* [Contributing](#contributing)
+
 # Introduction
 
 [View an overview here!](https://spikehd.github.io/projects/reMITM)
