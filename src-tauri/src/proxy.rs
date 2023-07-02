@@ -16,7 +16,7 @@ use rustls_pemfile as pemfile;
 use registry::{Data, Hive, Security};
 
 use crate::config::default_config;
-use crate::log::{print_info};
+use crate::log::{print_info, print_error};
 use crate::{certificate, config};
 
 // Globally store the server we are redirecting to
@@ -358,4 +358,8 @@ pub fn disconnect_from_proxy() {
     .arg("off")
     .output()
     .expect("failed to execute process");
+
+  if !set_proxy.status.success() {
+    print_error(format!("Failed to set proxy: {}", set_proxy.status));
+  }
 }
