@@ -82,6 +82,11 @@ fn main() {
       proxy::set_redirect_server,
       tools::open_shell,
     ])
+    .on_window_event(|event| {
+      if let tauri::WindowEvent::CloseRequested { .. } = event.event() {
+        disconnect();
+      }
+    })
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
 }
