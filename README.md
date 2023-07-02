@@ -50,10 +50,10 @@ Download a release build [from here](https://github.com/SpikeHD/reMITM/releases)
 
 # TODO
 
-- Make setting env variables in terminal work (add setting to set whatever `.bashrc`-type file is used?)
-- Make UI a little fancier
-- Make Linux and MacOS more stable
-- Import URIs to redirect from a file
+- [ ] Make setting env variables in terminal work (add setting to set whatever `.bashrc`-type file is used?)
+- [ ] Make UI a little fancier
+- [ ] Make Linux and MacOS more stable
+- [x] Import URIs to redirect from a file
 
 # Contributing
 
