@@ -16,7 +16,7 @@ use rustls_pemfile as pemfile;
 use registry::{Data, Hive, Security};
 
 use crate::config::default_config;
-use crate::log::{print_info, print_error};
+use crate::log::{print_error, print_info};
 use crate::{certificate, config};
 
 // Globally store the server we are redirecting to

@@ -63,10 +63,12 @@ export function UriList() {
     const file = await dialog.open({
       multiple: false,
       directory: false,
-      filters: [{
-        name: 'Text Files',
-        extensions: ['txt']
-      }],
+      filters: [
+        {
+          name: 'Text Files',
+          extensions: ['txt'],
+        },
+      ],
     })
 
     if (!file) return
@@ -101,7 +103,6 @@ export function UriList() {
             <img src={File} />
           </div>
         </div>
-
 
         {uris.map((uri, i) => (
           <Textbox

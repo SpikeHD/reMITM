@@ -12,14 +12,14 @@
 
 # Table of Contents
 
-* [Introduction](#introduction)
-* [Requirements](#requirements)
-  * [Windows](#windows)
-  * [Linux](#linux)
-  * [MacOS](#macos)
-* [Setup](#setup)
-* [TODO](#todo)
-* [Contributing](#contributing)
+- [Introduction](#introduction)
+- [Requirements](#requirements)
+  - [Windows](#windows)
+  - [Linux](#linux)
+  - [MacOS](#macos)
+- [Setup](#setup)
+- [TODO](#todo)
+- [Contributing](#contributing)
 
 # Introduction
 
@@ -35,13 +35,16 @@ reMITM was made for one purpose: to redirect requests to other places. While ~~i
 # Requirements
 
 ### Windows
+
 - Nothing!
 
 ### Linux
+
 - `libnss3-tools`
 - `gsettings` (optional)
 
 ### MacOS
+
 - Nothing!
 
 # Setup

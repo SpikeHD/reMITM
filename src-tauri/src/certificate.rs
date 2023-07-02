@@ -229,7 +229,7 @@ pub fn install_ca_files(path: PathBuf, app: Option<tauri::Window>) {
           "CertUtil Error",
           format!(
             "There was an error installing the certificate: \n\n{}",
-            std::str::from_utf8(&install_cert.stderr).unwrap_or_else(|_| "Unknown error")
+            std::str::from_utf8(&install_cert.stderr).unwrap_or("Unknown error")
           ),
         );
       }
