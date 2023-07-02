@@ -28,8 +28,8 @@
 reMITM was made for one purpose: to redirect requests to other places. While ~~it allows you to log network traffic~~, this isn't really intended to be a debugger. Rather, it's use comes from it's ease of configuration for simply redirecting network traffic to other places (such as `localhost`, if you are intending on consuming/monitoring the traffic).
 
 <div align="center">
-  <img height="260px" alt="reMITM on Windows" src="https://github.com/SpikeHD/reMITM/assets/25207995/47166174-823c-4bf2-8b5c-1b1b29beff11" />
-  <img height="260px" alt="reMITM on MacOS" src="https://github.com/SpikeHD/reMITM/assets/25207995/a4d7b299-abc2-4413-ada7-a9ea9e04da5e">
+  <img height="240px" alt="reMITM on Windows" src="https://github.com/SpikeHD/reMITM/assets/25207995/47166174-823c-4bf2-8b5c-1b1b29beff11" />
+  <img height="240px" alt="reMITM on MacOS" src="https://github.com/SpikeHD/reMITM/assets/25207995/a4d7b299-abc2-4413-ada7-a9ea9e04da5e">
 </div>
 
 # Requirements
