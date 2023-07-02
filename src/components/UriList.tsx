@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'preact/hooks'
 import { invoke } from '@tauri-apps/api/tauri'
+import { dialog } from '@tauri-apps/api'
+
+import { Textbox } from './Common/Textbox'
 
 import './UriList.css'
-import { Textbox } from './Common/Textbox'
+import File from '../assets/doc.svg'
 
 export function UriList() {
   const [uris, setUris] = useState([] as string[])
@@ -15,13 +18,15 @@ export function UriList() {
     })()
   }, [])
 
-  const addUri = async () => {
-    if (inputValue) {
-      const newList = [...uris, inputValue]
-      console.log('Adding: ', inputValue)
+  const addUri = async (uri?: string) => {
+    const value = uri || inputValue
+
+    if (value) {
+      const newList = [...uris, value]
+      console.log('Adding: ', value)
 
       setInputValue('')
-      setUris((prevUris) => [...prevUris, inputValue])
+      setUris((prevUris) => [...prevUris, value])
 
       // Write to the config
       const config = (await invoke('get_config')) as Config
@@ -53,18 +58,50 @@ export function UriList() {
     }
   }
 
+  const handleSelectFile = async () => {
+    // Open file select dialog
+    const file = await dialog.open({
+      multiple: false,
+      directory: false,
+      filters: [{
+        name: 'Text Files',
+        extensions: ['txt']
+      }],
+    })
+
+    if (!file) return
+
+    const fileContents: string = await invoke('read_as_text', {
+      path: file,
+    })
+
+    if (!fileContents) return
+
+    fileContents.split('\n').forEach((uri: string) => {
+      if (!uri) return
+      addUri(uri)
+    })
+  }
+
   return (
     <div id="UriList">
       <span>URIs to redirect:</span>
       <div id="UriListInner">
         {/* This first textboxes content is added to the list when the user unfocusses */}
-        <Textbox
-          defaultValue={inputValue}
-          placeholder={'Enter a new URI...'}
-          onEnter={addUri}
-          onBlur={addUri}
-          onChange={setInputValue}
-        />
+        <div id="UriListTextboxContainer">
+          <Textbox
+            defaultValue={inputValue}
+            placeholder={'Enter a new URI...'}
+            onEnter={addUri}
+            onBlur={addUri}
+            onChange={setInputValue}
+          />
+
+          <div id="UriListFile" onClick={handleSelectFile}>
+            <img src={File} />
+          </div>
+        </div>
+
 
         {uris.map((uri, i) => (
           <Textbox

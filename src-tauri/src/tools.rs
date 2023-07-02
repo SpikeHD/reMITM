@@ -1,3 +1,5 @@
+use std::path::PathBuf;
+
 use crate::config;
 use crate::log::{print_error, print_info};
 
@@ -102,5 +104,16 @@ pub fn open_shell() {
       Ok(_) => (),
       Err(e) => print_error(format!("Failed to open terminal: {}", e)),
     };
+  }
+}
+
+#[tauri::command]
+pub fn read_as_text(path: PathBuf) -> String {
+  match std::fs::read_to_string(path) {
+    Ok(s) => s,
+    Err(e) => {
+      print_error(format!("Failed to read file: {}", e));
+      "".to_string()
+    }
   }
 }

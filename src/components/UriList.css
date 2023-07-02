@@ -58,3 +58,29 @@
 
   width: 100%;
 }
+
+#UriListTextboxContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+#UriListTextboxContainer .TextboxOuter {
+  width: 90%;
+}
+
+#UriListFile {
+  height: 20px;
+  width: 20px;
+
+  margin: 0 8px;
+}
+
+#UriListFile:hover {
+  cursor: pointer;
+}
+
+#UriListFile img {
+  height: inherit;
+  width: inherit;
+}

@@ -81,6 +81,7 @@ fn main() {
       config::write_config,
       proxy::set_redirect_server,
       tools::open_shell,
+      tools::read_as_text,
     ])
     .on_window_event(|event| {
       if let tauri::WindowEvent::CloseRequested { .. } = event.event() {
