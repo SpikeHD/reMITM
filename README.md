@@ -57,6 +57,7 @@ Download a release build [from here](https://github.com/SpikeHD/reMITM/releases)
 - [ ] Make UI a little fancier
 - [ ] Make Linux and MacOS more stable
 - [x] Import URIs to redirect from a file
+- [x] Seperate(?) window for streaming each request and it's data
 
 # Contributing
 
