@@ -1,13 +1,18 @@
 <div align="center">
   <img src="./src/assets/remitm_logo.png" width="25%"/>
   <br /><br />
-  <div align="center">Dead-simple MITM redirection program.</div>
-
+  <div align="center">
+     <img src="https://img.shields.io/github/actions/workflow/status/SpikeHD/Dorion/build.yml" />
+     <img src="https://img.shields.io/github/package-json/v/SpikeHD/Dorion" />
+     <img src="https://img.shields.io/github/repo-size/SpikeHD/Dorion" />
+  </div>
   <div align="center">
     <img src="https://img.shields.io/github/issues-raw/SpikeHD/reMITM.svg?maxAge=25000" />
     <img src="https://img.shields.io/github/contributors/SpikeHD/reMITM.svg" />
     <img src="https://img.shields.io/github/commit-activity/m/SpikeHD/reMITM.svg" />
   </div>
+  
+  <div align="center">Dead-simple MITM redirection program.</div>
 </div>
 
 # Table of Contents
