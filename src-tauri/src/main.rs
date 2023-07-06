@@ -61,6 +61,9 @@ async fn open_log_window(app: tauri::AppHandle) {
       tauri::WindowUrl::App("index.html".into()),
     ).build().unwrap();
 
+
+    window.set_title(&"reMITM - Logs".to_string()).unwrap();
+
     window.eval("window.location.pathname = '/logs'").unwrap();
   });
 }
