@@ -101,6 +101,18 @@ impl HttpHandler for ProxyHandler {
 
     if path_and_query.is_some() {
       new_uri = format!("{}{}", new_uri, path_and_query.unwrap());
+
+      // Remove trailing slash
+      if new_uri.ends_with("/") {
+        new_uri.pop();
+      }
+
+      // if the port is 443, prepend https://
+      if new_uri.ends_with(":443") {
+        new_uri = format!("https://{}", new_uri);
+      } else {
+        new_uri = format!("http://{}", new_uri);
+      }
     }
 
     print_info(format!("Redirecting to {}...", new_uri));
