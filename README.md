@@ -30,7 +30,7 @@
 
 [View an overview here!](https://spikehd.github.io/projects/reMITM)
 
-reMITM was made for one purpose: to redirect requests to other places. While ~~it allows you to log network traffic~~, this isn't really intended to be a debugger. Rather, it's use comes from it's ease of configuration for simply redirecting network traffic to other places (such as `localhost`, if you are intending on consuming/monitoring the traffic).
+reMITM was made for one purpose: to redirect requests to other places. While it allows you to log network traffic, this isn't really intended to be a debugger. Rather, it's use comes from it's ease of configuration for simply redirecting network traffic to other places (such as `localhost`, if you are intending on consuming/monitoring the traffic).
 
 <div align="center">
   <img height="220px" alt="reMITM on Windows" src="https://github.com/SpikeHD/reMITM/assets/25207995/47166174-823c-4bf2-8b5c-1b1b29beff11" />
