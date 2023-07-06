@@ -19,7 +19,7 @@ use tauri::Manager;
 use registry::{Data, Hive, Security};
 
 use crate::config::default_config;
-use crate::log::{print_error, print_info};
+use crate::log::print_info;
 use crate::{certificate, config};
 
 #[derive(Clone, serde::Serialize, serde::Deserialize)]
@@ -45,7 +45,7 @@ async fn shutdown_signal() {
 
 #[derive(Clone)]
 pub struct ProxyHandler {
-  app_handle: Option<tauri::AppHandle>
+  app_handle: Option<tauri::AppHandle>,
 }
 
 #[async_trait]

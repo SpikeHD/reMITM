@@ -55,14 +55,12 @@ fn install_ca_command(window: tauri::Window) {
 #[tauri::command]
 async fn open_log_window(app: tauri::AppHandle) {
   std::thread::spawn(move || {
-    let window = tauri::WindowBuilder::new(
-      &app,
-      "local",
-      tauri::WindowUrl::App("index.html".into()),
-    ).build().unwrap();
+    let window =
+      tauri::WindowBuilder::new(&app, "local", tauri::WindowUrl::App("index.html".into()))
+        .build()
+        .unwrap();
 
-
-    window.set_title(&"reMITM - Logs".to_string()).unwrap();
+    window.set_title("reMITM - Logs").unwrap();
 
     window.eval("window.location.pathname = '/logs'").unwrap();
   });

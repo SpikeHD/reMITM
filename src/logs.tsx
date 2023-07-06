@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'preact/hooks'
-import { invoke } from '@tauri-apps/api'
 import { listen } from '@tauri-apps/api/event'
 
 import { LogRow } from './components/Logs/LogRow'
@@ -38,40 +37,39 @@ export function Logs() {
 
   return (
     <>
-      <div id="Logs" ref={(el) => {
-        if (el) {
-          const root = document.getElementById('app') as HTMLElement
-          const isOverflowing = el.scrollHeight >= root.clientHeight
-          setIsOverflowing(isOverflowing)
+      <div
+        id="Logs"
+        ref={(el) => {
+          if (el) {
+            const root = document.getElementById('app') as HTMLElement
+            const isOverflowing = el.scrollHeight >= root.clientHeight
+            setIsOverflowing(isOverflowing)
 
-          // If the user has scrolled up, disable auto scroll
-          if (window.scrollY < previousScroll) {
-            setAutoScroll(false)
+            // If the user has scrolled up, disable auto scroll
+            if (window.scrollY < previousScroll) {
+              setAutoScroll(false)
+            }
           }
-        }
-      }}>
-        {
-          requests.length > 0 ? requests.map((request) => (
-            <LogRow {...request} key={request.key} />
-          )) : (
-            <div className="LogRow">
-              No requests yet...
-            </div>
-          )
-        }
+        }}
+      >
+        {requests.length > 0 ? (
+          requests.map((request) => <LogRow {...request} key={request.key} />)
+        ) : (
+          <div className="LogRow">No requests yet...</div>
+        )}
       </div>
 
-      {
-        isOverflowing && (
-          <div id="ScrollDown" onClick={() => {
+      {isOverflowing && (
+        <div
+          id="ScrollDown"
+          onClick={() => {
             scrollDown()
             setAutoScroll(true)
-          }}>
-            <img src={Arrow} />
-          </div>
-        )
-      }
-
+          }}
+        >
+          <img src={Arrow} />
+        </div>
+      )}
     </>
   )
 }
