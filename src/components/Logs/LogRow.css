@@ -39,3 +39,7 @@
 .LogRowMethod {
   margin: 0 10px;
 }
+
+.LogRowURL {
+  text-decoration: underline;
+}

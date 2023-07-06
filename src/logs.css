@@ -1,3 +1,12 @@
+#app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+
+  height: 90vh;
+}
+
 #Logs {
   width: 100%;
 
@@ -7,4 +16,32 @@
 
   /* monospace font */
   font-family: "Courier New", Courier, monospace;
+}
+
+#ScrollDown {
+  position: sticky;
+  left: 90%;
+  bottom: 50px;
+
+  height: 60px;
+  width: 60px;
+
+  border-radius: 50%;
+  background: var(--bg-alt);
+
+  border: 1px solid var(--border);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#ScrollDown:hover {
+  cursor: pointer;
+}
+
+#ScrollDown img {
+  height: 60%;
+
+  transform: rotate(90deg);
 }

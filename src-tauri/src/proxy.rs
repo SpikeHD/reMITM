@@ -82,7 +82,7 @@ impl HttpHandler for ProxyHandler {
       body: "".to_string(),
       timestamp: chrono::Local::now().to_string(),
       redirected_to: "".to_string(),
-      key: rand::thread_rng().gen_range(0..100000000).to_string(),
+      key: rand::thread_rng().gen_range(0..1000000000).to_string(),
     };
 
     // Handle CONNECT
