@@ -1,0 +1,10 @@
+#Logs {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  /* monospace font */
+  font-family: "Courier New", Courier, monospace;
+}

@@ -52,6 +52,19 @@ fn install_ca_command(window: tauri::Window) {
   certificate::install_ca_files(crt_path.join("cert.crt"), Some(window));
 }
 
+#[tauri::command]
+async fn open_log_window(app: tauri::AppHandle) {
+  std::thread::spawn(move || {
+    let window = tauri::WindowBuilder::new(
+      &app,
+      "local",
+      tauri::WindowUrl::App("index.html".into()),
+    ).build().unwrap();
+
+    window.eval("window.location.pathname = '/logs'").unwrap();
+  });
+}
+
 fn main() {
   // If we are in debug, don't reopen as admin/root
   #[cfg(target_os = "windows")]
@@ -77,6 +90,7 @@ fn main() {
       get_platform,
       get_hash,
       install_ca_command,
+      open_log_window,
       config::get_config,
       config::write_config,
       proxy::set_redirect_server,
@@ -93,11 +107,11 @@ fn main() {
 }
 
 #[tauri::command]
-async fn connect() {
+async fn connect(app: tauri::AppHandle) {
   print_info("Connecting...".to_string());
 
   proxy::connect_to_proxy();
-  proxy::create_proxy().await;
+  proxy::create_proxy(Some(app)).await;
 }
 
 #[tauri::command]

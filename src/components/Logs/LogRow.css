@@ -1,0 +1,41 @@
+.LogRow {
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
+  margin: 4px 0;
+  padding: 10px;
+
+  max-height: 30%;
+
+  border-radius: 2px;
+  background: var(--textbox-bg);
+}
+
+.LogRowLeft,
+.LogRowRight {
+  /* width: 100%; */
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.LogRowHeader {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.LogRowBody {
+  width: 90%;
+
+}
+
+.LogRowMethod {
+  margin: 0 10px;
+}

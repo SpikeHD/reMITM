@@ -74,6 +74,7 @@ dependencies = [
  "is_elevated",
  "once_cell",
  "open",
+ "rand 0.8.5",
  "rcgen 0.11.1",
  "registry",
  "rustls-pemfile",

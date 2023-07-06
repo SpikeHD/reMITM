@@ -11,3 +11,13 @@ interface PartialConfig {
   modify_gsettings: boolean
   use_env_variables: boolean
 }
+
+interface RequestLog {
+  url: string
+  method: string
+  response_code: string
+  body: string
+  timestamp: string
+  redirected_to: string
+  key: string
+}

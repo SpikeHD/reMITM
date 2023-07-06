@@ -12,12 +12,26 @@ use hudsucker::{
 
 use rustls_pemfile as pemfile;
 
+use rand::Rng;
+use tauri::Manager;
+
 #[cfg(windows)]
 use registry::{Data, Hive, Security};
 
 use crate::config::default_config;
 use crate::log::{print_error, print_info};
 use crate::{certificate, config};
+
+#[derive(Clone, serde::Serialize, serde::Deserialize)]
+pub struct RequestLogData {
+  url: String,
+  method: String,
+  response_code: String,
+  body: String,
+  timestamp: String,
+  redirected_to: String,
+  key: String,
+}
 
 // Globally store the server we are redirecting to
 static REDIRECT_TO: Lazy<Mutex<String>> =
@@ -30,7 +44,9 @@ async fn shutdown_signal() {
 }
 
 #[derive(Clone)]
-pub struct ProxyHandler;
+pub struct ProxyHandler {
+  app_handle: Option<tauri::AppHandle>
+}
 
 #[async_trait]
 impl HttpHandler for ProxyHandler {
@@ -59,6 +75,16 @@ impl HttpHandler for ProxyHandler {
     _ctx: &HttpContext,
     mut req: Request<Body>,
   ) -> RequestOrResponse {
+    let mut event_data = RequestLogData {
+      url: req.uri().to_string(),
+      method: req.method().to_string(),
+      response_code: "".to_string(),
+      body: "".to_string(),
+      timestamp: chrono::Local::now().to_string(),
+      redirected_to: "".to_string(),
+      key: rand::thread_rng().gen_range(0..100000000).to_string(),
+    };
+
     // Handle CONNECT
     if req.method().as_str() == "CONNECT" {
       let builder = Response::builder()
@@ -66,6 +92,13 @@ impl HttpHandler for ProxyHandler {
         .status(StatusCode::OK);
 
       let res = builder.body(()).unwrap();
+
+      // Emit log event
+      if let Some(app_handle) = &self.app_handle {
+        app_handle
+          .emit_all("log_request", &event_data)
+          .expect("failed to emit event");
+      }
 
       *res.body()
     }
@@ -89,8 +122,17 @@ impl HttpHandler for ProxyHandler {
       }
     }
 
+    event_data.body = format!("{:?}", req.body());
+
     // If we don't need to redirect, just let the request continue
     if !do_redirect {
+      // Emit log event
+      if let Some(app_handle) = &self.app_handle {
+        app_handle
+          .emit_all("log_request", &event_data)
+          .expect("failed to emit event");
+      }
+
       return req.into();
     }
 
@@ -103,7 +145,7 @@ impl HttpHandler for ProxyHandler {
       new_uri = format!("{}{}", new_uri, path_and_query.unwrap());
 
       // Remove trailing slash
-      if new_uri.ends_with("/") {
+      if new_uri.ends_with('/') {
         new_uri.pop();
       }
 
@@ -116,6 +158,14 @@ impl HttpHandler for ProxyHandler {
     }
 
     print_info(format!("Redirecting to {}...", new_uri));
+
+    event_data.redirected_to = new_uri.clone();
+
+    if let Some(app_handle) = &self.app_handle {
+      app_handle
+        .emit_all("log_request", &event_data)
+        .expect("failed to emit event");
+    }
 
     *req.uri_mut() = new_uri.parse().unwrap();
 
@@ -149,7 +199,7 @@ pub fn set_redirect_server(server: String) {
 /**
  * Starts the HTTP(S) proxy server.
  */
-pub async fn create_proxy() {
+pub async fn create_proxy(app: Option<tauri::AppHandle>) {
   let proxy_port = config::get_config()
     .proxy_port
     .unwrap_or_else(|| default_config().proxy_port.unwrap());
@@ -185,7 +235,7 @@ pub async fn create_proxy() {
     .with_addr(SocketAddr::from(([0, 0, 0, 0], proxy_port)))
     .with_rustls_client()
     .with_ca(authority)
-    .with_http_handler(ProxyHandler)
+    .with_http_handler(ProxyHandler { app_handle: app })
     .build();
 
   // Start the proxy.

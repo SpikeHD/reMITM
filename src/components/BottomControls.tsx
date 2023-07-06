@@ -14,13 +14,17 @@ export function BottomControls(props: Props) {
     await invoke('open_shell')
   }
 
+  const openLogs = async () => {
+    await invoke('open_log_window')
+  }
+
   return (
     <div id="BottomControls" className={props.isOn ? '' : 'hide'}>
       <span>
         <img src={TerminalIcon} onClick={openShell} />
       </span>
       <span>
-        <img src={LogIcon} />
+        <img src={LogIcon} onClick={openLogs} />
       </span>
     </div>
   )
