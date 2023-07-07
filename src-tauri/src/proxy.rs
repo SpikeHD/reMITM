@@ -278,6 +278,7 @@ pub fn connect_to_proxy() {
 #[tauri::command]
 pub fn connect_to_proxy() {
   use std::process::Command;
+  use crate::log::print_error;
 
   // Create the server string
   let config = config::get_config();
@@ -393,6 +394,7 @@ pub fn disconnect_from_proxy() {
 #[tauri::command]
 pub fn disconnect_from_proxy() {
   use std::process::Command;
+  use crate::log::print_error;
 
   // Set the proxy via gsettings
   let set_proxy = Command::new("gsettings")
