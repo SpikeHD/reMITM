@@ -6,6 +6,7 @@ import { LogRow } from './components/Logs/LogRow'
 import './app.css'
 import './logs.css'
 import Arrow from './assets/arrow.svg'
+import { Tr } from './components/Translation/Translate'
 
 export function Logs() {
   const [requests, setRequests] = useState([] as RequestLog[])
@@ -55,7 +56,9 @@ export function Logs() {
         {requests.length > 0 ? (
           requests.map((request) => <LogRow {...request} key={request.key} />)
         ) : (
-          <div className="LogRow">No requests yet...</div>
+          <div className="LogRow">
+            <Tr text="logs.no_requests" />
+          </div>
         )}
       </div>
 
