@@ -3,6 +3,7 @@ import { invoke } from '@tauri-apps/api/tauri'
 import { dialog } from '@tauri-apps/api'
 
 import { Textbox } from './Common/Textbox'
+import { Tr, tr } from './Translation/Translate'
 
 import './UriList.css'
 import File from '../assets/doc.svg'
@@ -10,11 +11,14 @@ import File from '../assets/doc.svg'
 export function UriList() {
   const [uris, setUris] = useState([] as string[])
   const [inputValue, setInputValue] = useState<string>('')
+  const [placeholder, setPlaceholder] = useState<string>('')
 
   useEffect(() => {
     ;(async () => {
       const config = (await invoke('get_config')) as Config
       setUris(config.urls_to_redirect)
+
+      setPlaceholder(await tr('main.enter_new_uri'))
     })()
   }, [])
 
@@ -87,13 +91,15 @@ export function UriList() {
 
   return (
     <div id="UriList">
-      <span>URIs to redirect:</span>
+      <span>
+        <Tr text={'main.uris_to_redirect'} />
+      </span>
       <div id="UriListInner">
         {/* This first textboxes content is added to the list when the user unfocusses */}
         <div id="UriListTextboxContainer">
           <Textbox
             defaultValue={inputValue}
-            placeholder={'Enter a new URI...'}
+            placeholder={placeholder}
             onEnter={addUri}
             onBlur={addUri}
             onChange={setInputValue}

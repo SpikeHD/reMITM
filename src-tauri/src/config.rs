@@ -4,6 +4,7 @@ use std::path::PathBuf;
 
 #[derive(Deserialize, Serialize, Clone)]
 pub struct Config {
+  pub language: Option<String>,
   pub launch_at_startup: Option<bool>,
   pub proxy_port: Option<u16>,
   pub urls_to_redirect: Option<Vec<String>>,
@@ -20,6 +21,7 @@ pub static mut CONFIG: Option<Config> = None;
 
 pub fn default_config() -> Config {
   Config {
+    language: Some("en".to_string()),
     launch_at_startup: Some(false),
     proxy_port: Some(8111),
     urls_to_redirect: Some(vec![]),

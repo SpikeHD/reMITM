@@ -7,6 +7,7 @@ import CloseButton from '../assets/close.svg'
 import { Checkbox } from './Common/Checkbox'
 import { Textbox } from './Common/Textbox'
 import { DirTextbox } from './Common/DirTextbox'
+import { Tr } from './Translation/Translate'
 
 interface Props {
   onClose: () => void
@@ -28,8 +29,6 @@ export function Configuration(props: Props) {
       setHide(false)
       setConfig((await invoke('get_config')) as PartialConfig)
       setPlatform(await invoke('get_platform'))
-
-      console.log('Platform: ' + platform)
     })()
   }, [platform])
 
@@ -73,7 +72,9 @@ export function Configuration(props: Props) {
 
       <div id="ConfigurationInner">
         <div className="ConfigurationRow">
-          <div className="ConfigurationText">Launch on Startup</div>
+          <div className="ConfigurationText">
+            <Tr text="config.launch_on_startup" />
+          </div>
           <div className="ConfigurationControl">
             <Checkbox
               defaultValue={config?.launch_at_startup}
@@ -83,7 +84,9 @@ export function Configuration(props: Props) {
         </div>
 
         <div className="ConfigurationRow">
-          <div className="ConfigurationText">Proxy Port</div>
+        <div className="ConfigurationText">
+            <Tr text="config.proxy_port" />
+          </div>
           <div className="ConfigurationControl PortConfig">
             <Textbox
               defaultValue={config?.proxy_port.toString()}
@@ -94,7 +97,9 @@ export function Configuration(props: Props) {
         </div>
 
         <div className="ConfigurationRow">
-          <div className="ConfigurationText">Terminal</div>
+          <div className="ConfigurationText">
+            <Tr text="config.preferred_terminal" />
+          </div>
           <div className="ConfigurationControl">
             <DirTextbox
               defaultValue={config?.terminal}
@@ -106,7 +111,9 @@ export function Configuration(props: Props) {
         <div
           className={'ConfigurationRow ' + (platform !== 'linux' && 'disabled')}
         >
-          <div className="ConfigurationText">Modify GSettings</div>
+          <div className="ConfigurationText">
+            <Tr text="config.modify_gsettings" />
+          </div>
           <div className="ConfigurationControl">
             <Checkbox
               disabled={platform !== 'linux'}
@@ -121,7 +128,9 @@ export function Configuration(props: Props) {
             'ConfigurationRow ' + (platform === 'windows' && 'disabled')
           }
         >
-          <div className="ConfigurationText">Use Environment Variables</div>
+          <div className="ConfigurationText">
+            <Tr text="config.use_environment_variables" />
+          </div>
           <div className="ConfigurationControl">
             <Checkbox
               disabled={platform === 'windows'}

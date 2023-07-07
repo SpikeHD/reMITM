@@ -3,6 +3,7 @@ import { invoke } from '@tauri-apps/api/tauri'
 
 import './OnOff.css'
 import OnOffSVG from '../assets/onoff.svg'
+import { tr } from './Translation/Translate'
 
 interface Props {
   onChange?: (value: boolean) => void
@@ -15,7 +16,7 @@ export function OnOff(props: Props) {
   const toggle = async () => {
     setIsOn(!isOn)
 
-    setConnectState(isOn ? 'Disconnected' : 'Connecting...')
+    setConnectState(isOn ? await tr('main.disconnected') : await tr('main.connecting'))
 
     isOn ? await invoke('disconnect') : await invoke('connect')
 
@@ -23,7 +24,7 @@ export function OnOff(props: Props) {
       props.onChange(!isOn)
     }
 
-    setConnectState(isOn ? 'Disconnected' : 'Connected')
+    setConnectState(isOn ? await tr('main.disconnected') : await tr('main.connected'))
   }
 
   return (

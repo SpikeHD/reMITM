@@ -7,6 +7,7 @@ use proxy::set_redirect_server;
 
 mod certificate;
 mod config;
+mod lang;
 mod log;
 mod matcher;
 mod proxy;
@@ -94,6 +95,8 @@ fn main() {
       open_log_window,
       config::get_config,
       config::write_config,
+      lang::get_language,
+      lang::language_list,
       proxy::set_redirect_server,
       tools::open_shell,
       tools::read_as_text,

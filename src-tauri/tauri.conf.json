@@ -20,6 +20,11 @@
         "message": true,
         "open": true,
         "save": false
+      },
+      "fs": {
+        "scope": [
+          "$RESOURCE/*"
+        ]
       }
     },
     "bundle": {
@@ -46,7 +51,9 @@
         "providerShortName": null,
         "signingIdentity": null
       },
-      "resources": [],
+      "resources": [
+        "lang/*.json"
+      ],
       "shortDescription": "",
       "targets": "all",
       "windows": {

@@ -3,10 +3,14 @@ import { Textbox } from './Common/Textbox'
 import { invoke } from '@tauri-apps/api'
 
 import './RedirectSelect.css'
+import { Tr, tr } from './Translation/Translate'
 
 export function RedirectSelect() {
   const [redirect, setRedirect] = useState('')
   const [port, setPort] = useState('')
+
+  const [portPlaceholder, setPortPlaceholder] = useState('')
+  const [addressPlaceholder, setAddressPlaceholder] = useState('')
 
   useEffect(() => {
     ;(async () => {
@@ -28,6 +32,10 @@ export function RedirectSelect() {
       await invoke('set_redirect_server', {
         server: `${urlWithoutPort}:${port}`,
       })
+
+      // Set trnslation placeholders
+      setPortPlaceholder(await tr('main.port'))
+      setAddressPlaceholder(await tr('main.server_address'))
     })()
   }, [])
 
@@ -58,17 +66,19 @@ export function RedirectSelect() {
 
   return (
     <div id="RedirectSelect">
-      <span>Redirect to:</span>
+      <span>
+        <Tr text="main.redirect_to" />
+      </span>
       <div className="RedirectInner">
         <Textbox
-          placeholder="Server address..."
+          placeholder={addressPlaceholder}
           class="RedirectServer"
           defaultValue={redirect}
           onBlur={handleRedirectChange}
           onEnter={handleRedirectChange}
         />
         <Textbox
-          placeholder="Port..."
+          placeholder={portPlaceholder}
           class="RedirectPort"
           defaultValue={port}
           onBlur={handlePortChange}
