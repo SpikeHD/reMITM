@@ -8,6 +8,7 @@ import { Checkbox } from './Common/Checkbox'
 import { Textbox } from './Common/Textbox'
 import { DirTextbox } from './Common/DirTextbox'
 import { Tr } from './Translation/Translate'
+import { h } from 'preact'
 
 interface Props {
   onClose: () => void
@@ -15,6 +16,7 @@ interface Props {
 
 export function Configuration(props: Props) {
   const [config, setConfig] = useState<PartialConfig>({
+    language: 'en',
     launch_at_startup: false,
     proxy_port: 0,
     terminal: '',
@@ -23,12 +25,17 @@ export function Configuration(props: Props) {
   })
   const [hide, setHide] = useState(true)
   const [platform, setPlatform] = useState('windows')
+  const [languages, setLanguages] = useState<Lang[]>([])
 
   useEffect(() => {
     ;(async () => {
       setHide(false)
       setConfig((await invoke('get_config')) as PartialConfig)
       setPlatform(await invoke('get_platform'))
+
+      // Get language list from the backend
+      const languages = (await invoke('language_list')) as Lang[]
+      setLanguages(languages)
     })()
   }, [platform])
 
@@ -64,6 +71,10 @@ export function Configuration(props: Props) {
     await setConfigValue('use_env_variables', value)
   }
 
+  const setLanguage = async (value: string) => {
+    await setConfigValue('language', value)
+  }
+
   return (
     <div id="Configuration" className={hide ? 'hide' : ''}>
       <div id="ConfigurationTop">
@@ -71,6 +82,23 @@ export function Configuration(props: Props) {
       </div>
 
       <div id="ConfigurationInner">
+      <div className="ConfigurationRow">
+          <div className="ConfigurationText">
+            <Tr text="config.language" />
+          </div>
+          <div className="ConfigurationControl">
+            <select onChange={(e: h.JSX.TargetedEvent<HTMLSelectElement>) => {
+              setLanguage(e?.currentTarget?.value)
+            }}>
+              {
+                languages.map((lang) => {
+                  return <option key={lang.filename} value={lang.filename}>{lang.name}</option>
+                })
+              }
+            </select>
+          </div>
+        </div>
+
         <div className="ConfigurationRow">
           <div className="ConfigurationText">
             <Tr text="config.launch_on_startup" />

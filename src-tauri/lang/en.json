@@ -11,6 +11,7 @@
     "enter_new_uri": "Enter a new URI..."
   },
   "config": {
+    "language": "Language",
     "launch_on_startup": "Launch on startup",
     "proxy_port": "Proxy port",
     "preferred_terminal": "Preferred terminal",

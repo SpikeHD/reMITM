@@ -5,6 +5,7 @@ interface Config extends PartialConfig {
 }
 
 interface PartialConfig {
+  language: string
   launch_at_startup: boolean
   proxy_port: number
   terminal: string
@@ -20,4 +21,9 @@ interface RequestLog {
   timestamp: string
   redirected_to: string
   key: string
+}
+
+interface Lang {
+  name: string,
+  filename: string,
 }

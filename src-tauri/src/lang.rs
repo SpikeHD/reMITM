@@ -1,8 +1,6 @@
 use std::{path::PathBuf, io::Read};
 
-use serde_json::json;
-
-use crate::config::get_config;
+use crate::{config::get_config, log::{print_info, print_error, print_warning}};
 
 pub static mut LANG: Option<String> = None;
 
@@ -13,23 +11,37 @@ pub struct Lang {
 }
 
 #[tauri::command]
-pub fn get_language(app: tauri::AppHandle, force_reload: Option<bool>) -> String {
+pub fn get_language(app: tauri::AppHandle, force_reload: Option<bool>, lang: Option<String>) -> String {
   let config = get_config();
-  let language = config.language.clone().unwrap_or_else(|| String::from("en"));
+
+  // Load from "lang" argument, or from the config otherwise. Default to english
+  let language = lang.unwrap_or(
+    config.language.clone().unwrap_or_else(|| String::from("en"))
+  );
 
   unsafe {
     if LANG.is_none() || force_reload.unwrap_or(false) {
       // Load the file
+      print_info(format!("Loading language file: {}", language));
+
       let lang_file = app.path_resolver().resolve_resource(PathBuf::from(format!("lang/{}.json", language))).unwrap();
-      let mut file = std::fs::File::open(lang_file).unwrap();
+      let mut file = std::fs::File::open(lang_file).unwrap_or_else(|_| {
+        print_warning(format!("Error loading language file: {}, falling back to english.", language));
+
+        // Fallback to english
+        std::fs::File::open(app.path_resolver().resolve_resource(PathBuf::from("lang/en.json")).unwrap()).unwrap()
+      });
       let mut contents = String::new();
 
       file.read_to_string(&mut contents).unwrap();
 
       // Cache the file
-      LANG = Some(contents);
+      if LANG.is_none() || force_reload.unwrap_or(false) {
+        print_info("Reloading language cache".to_string());
+        LANG = Some(contents.clone());
+      }
 
-      return LANG.clone().unwrap();
+      return contents;
     }
 
     return LANG.clone().unwrap();

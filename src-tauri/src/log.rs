@@ -36,7 +36,7 @@ pub fn print_error(message: String) {
   append_logfile(format!("[ERROR] {}", message));
 }
 
-pub fn _print_warning(message: String) {
+pub fn print_warning(message: String) {
   print_pretty("[WARNING]".yellow().to_string(), message.clone());
 
   // Write to log file
