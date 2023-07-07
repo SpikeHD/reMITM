@@ -28,3 +28,39 @@ body {
 
   height: 90vh;
 }
+
+select {
+  background: transparent;
+  color: var(--primary);
+
+  border: none;
+  border-bottom: 1px solid var(--primary);
+
+  outline: none;
+
+  font-size: 14px;
+  font-weight: bold;
+
+  padding: 4px 0;
+  margin: 4px 0;
+}
+
+select:hover {
+  cursor: pointer;
+}
+
+select option {
+  background: var(--bg-alt);
+  color: var(--primary);
+
+  border: none;
+  border-bottom: 1px solid var(--primary);
+
+  outline: none;
+
+  font-size: 14px;
+  font-weight: bold;
+
+  padding: 4px 0;
+  margin: 4px 0;
+}

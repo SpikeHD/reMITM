@@ -82,7 +82,7 @@ export function Configuration(props: Props) {
       </div>
 
       <div id="ConfigurationInner">
-      <div className="ConfigurationRow">
+        <div className="ConfigurationRow">
           <div className="ConfigurationText">
             <Tr text="config.language" />
           </div>
