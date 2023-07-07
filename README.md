@@ -25,6 +25,7 @@
 - [Setup](#setup)
 - [TODO](#todo)
 - [Contributing](#contributing)
+- [Translating](#translating)
 
 # Introduction
 
@@ -67,3 +68,7 @@ Download a release build [from here](https://github.com/SpikeHD/reMITM/releases)
 # Contributing
 
 Issues, pull requests, etc. are all welcome!
+
+# Translating
+
+Same as above, you can find language files in `src-tauri/lang`.
