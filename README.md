@@ -64,6 +64,7 @@ Download a release build [from here](https://github.com/SpikeHD/reMITM/releases)
 - [ ] Make Linux and MacOS more stable
 - [x] Import URIs to redirect from a file
 - [ ] Seperate(?) window for showing each request and it's data
+- [ ] Button to set via `adb` (eg. `adb shell settings put global http_proxy <ADDRESS>`), for things like Anbox.
 
 # Contributing
 
