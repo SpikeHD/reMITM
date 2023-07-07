@@ -1,6 +1,9 @@
-use std::{path::PathBuf, io::Read};
+use std::{io::Read, path::PathBuf};
 
-use crate::{config::get_config, log::{print_info, print_error, print_warning}};
+use crate::{
+  config::get_config,
+  log::{print_info, print_warning},
+};
 
 pub static mut LANG: Option<String> = None;
 
@@ -11,25 +14,39 @@ pub struct Lang {
 }
 
 #[tauri::command]
-pub fn get_language(app: tauri::AppHandle, force_reload: Option<bool>, lang: Option<String>) -> String {
+pub fn get_language(
+  app: tauri::AppHandle,
+  force_reload: Option<bool>,
+  lang: Option<String>,
+) -> String {
   let config = get_config();
 
   // Load from "lang" argument, or from the config otherwise. Default to english
-  let language = lang.unwrap_or(
-    config.language.clone().unwrap_or_else(|| String::from("en"))
-  );
+  let language = lang.unwrap_or_else(|| config.language.unwrap_or_else(|| String::from("en")));
 
   unsafe {
     if LANG.is_none() || force_reload.unwrap_or(false) {
       // Load the file
       print_info(format!("Loading language file: {}", language));
 
-      let lang_file = app.path_resolver().resolve_resource(PathBuf::from(format!("lang/{}.json", language))).unwrap();
+      let lang_file = app
+        .path_resolver()
+        .resolve_resource(PathBuf::from(format!("lang/{}.json", language)))
+        .unwrap();
       let mut file = std::fs::File::open(lang_file).unwrap_or_else(|_| {
-        print_warning(format!("Error loading language file: {}, falling back to english.", language));
+        print_warning(format!(
+          "Error loading language file: {}, falling back to english.",
+          language
+        ));
 
         // Fallback to english
-        std::fs::File::open(app.path_resolver().resolve_resource(PathBuf::from("lang/en.json")).unwrap()).unwrap()
+        std::fs::File::open(
+          app
+            .path_resolver()
+            .resolve_resource(PathBuf::from("lang/en.json"))
+            .unwrap(),
+        )
+        .unwrap()
       });
       let mut contents = String::new();
 
@@ -44,7 +61,7 @@ pub fn get_language(app: tauri::AppHandle, force_reload: Option<bool>, lang: Opt
       return contents;
     }
 
-    return LANG.clone().unwrap();
+    LANG.clone().unwrap()
   }
 }
 
@@ -52,8 +69,11 @@ pub fn get_language(app: tauri::AppHandle, force_reload: Option<bool>, lang: Opt
 pub fn language_list(app: tauri::AppHandle) -> Vec<Lang> {
   // Read the "lang" dir and return the list
   let mut langs: Vec<Lang> = vec![];
-  let files = app.path_resolver().resolve_resource(PathBuf::from("lang/")).unwrap();
-  let file_list = std::fs::read_dir(files.clone()).unwrap();
+  let files = app
+    .path_resolver()
+    .resolve_resource(PathBuf::from("lang/"))
+    .unwrap();
+  let file_list = std::fs::read_dir(files).unwrap();
 
   // Read each file and create a lang object from the "language" json key within it
   for file in file_list {

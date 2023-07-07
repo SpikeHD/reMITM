@@ -14,19 +14,17 @@ export function Tr(props: Props) {
     })()
   }, [text])
 
-  return (
-    <>
-      {text}
-    </>
-  )
+  return <>{text}</>
 }
 
 export async function tr(key: string) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const lang = JSON.parse(await invoke('get_language'))
-  const enFallback = JSON.parse(await invoke('get_language', {
-    lang: 'en'
-  })) as Record<string, any>
+  const enFallback = JSON.parse(
+    await invoke('get_language', {
+      lang: 'en',
+    })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ) as Record<string, any>
   const keyTree = key.split('.')
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -35,7 +33,7 @@ export async function tr(key: string) {
 
     for (let i = 0; i < keyTree.length; i++) {
       const key = keyTree[i]
-  
+
       if (!result) {
         result = obj[key]
       } else {
@@ -46,7 +44,8 @@ export async function tr(key: string) {
     return result
   }
 
-  const result = findResult(lang) || findResult(enFallback) || 'MISSING TRANSLATION'
+  const result =
+    findResult(lang) || findResult(enFallback) || 'MISSING TRANSLATION'
 
   return result
 }

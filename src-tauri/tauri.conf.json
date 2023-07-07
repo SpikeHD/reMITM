@@ -22,9 +22,13 @@
         "save": false
       },
       "fs": {
-        "scope": [
-          "$RESOURCE/*"
-        ]
+        "scope": ["$RESOURCE/*"]
+      },
+      "process": {
+        "all": false,
+        "exit": true,
+        "relaunch": true,
+        "relaunchDangerousAllowSymlinkMacos": false
       }
     },
     "bundle": {
@@ -51,9 +55,7 @@
         "providerShortName": null,
         "signingIdentity": null
       },
-      "resources": [
-        "lang/*.json"
-      ],
+      "resources": ["lang/*.json"],
       "shortDescription": "",
       "targets": "all",
       "windows": {

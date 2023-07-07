@@ -19,7 +19,7 @@ use tauri::Manager;
 use registry::{Data, Hive, Security};
 
 use crate::config::default_config;
-use crate::log::{print_info, print_error};
+use crate::log::print_info;
 use crate::{certificate, config};
 
 #[derive(Clone, serde::Serialize, serde::Deserialize)]

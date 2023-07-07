@@ -16,7 +16,9 @@ export function OnOff(props: Props) {
   const toggle = async () => {
     setIsOn(!isOn)
 
-    setConnectState(isOn ? await tr('main.disconnected') : await tr('main.connecting'))
+    setConnectState(
+      isOn ? await tr('main.disconnected') : await tr('main.connecting')
+    )
 
     isOn ? await invoke('disconnect') : await invoke('connect')
 
@@ -24,7 +26,9 @@ export function OnOff(props: Props) {
       props.onChange(!isOn)
     }
 
-    setConnectState(isOn ? await tr('main.disconnected') : await tr('main.connected'))
+    setConnectState(
+      isOn ? await tr('main.disconnected') : await tr('main.connected')
+    )
   }
 
   return (

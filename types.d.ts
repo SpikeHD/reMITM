@@ -24,6 +24,6 @@ interface RequestLog {
 }
 
 interface Lang {
-  name: string,
-  filename: string,
+  name: string
+  filename: string
 }

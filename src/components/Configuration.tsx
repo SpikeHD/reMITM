@@ -1,4 +1,5 @@
 import { invoke } from '@tauri-apps/api'
+import { relaunch } from '@tauri-apps/api/process'
 import { useEffect, useState } from 'preact/hooks'
 
 import './Configuration.css'
@@ -73,6 +74,9 @@ export function Configuration(props: Props) {
 
   const setLanguage = async (value: string) => {
     await setConfigValue('language', value)
+
+    // We have to relaunch after changing the language
+    await relaunch()
   }
 
   return (
@@ -87,14 +91,18 @@ export function Configuration(props: Props) {
             <Tr text="config.language" />
           </div>
           <div className="ConfigurationControl">
-            <select onChange={(e: h.JSX.TargetedEvent<HTMLSelectElement>) => {
-              setLanguage(e?.currentTarget?.value)
-            }}>
-              {
-                languages.map((lang) => {
-                  return <option key={lang.filename} value={lang.filename}>{lang.name.replace(/"/g, '')}</option>
-                })
-              }
+            <select
+              onChange={(e: h.JSX.TargetedEvent<HTMLSelectElement>) => {
+                setLanguage(e?.currentTarget?.value)
+              }}
+            >
+              {languages.map((lang) => {
+                return (
+                  <option key={lang.filename} value={lang.filename}>
+                    {lang.name.replace(/"/g, '')}
+                  </option>
+                )
+              })}
             </select>
           </div>
         </div>
@@ -112,7 +120,7 @@ export function Configuration(props: Props) {
         </div>
 
         <div className="ConfigurationRow">
-        <div className="ConfigurationText">
+          <div className="ConfigurationText">
             <Tr text="config.proxy_port" />
           </div>
           <div className="ConfigurationControl PortConfig">
