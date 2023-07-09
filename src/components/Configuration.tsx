@@ -98,7 +98,7 @@ export function Configuration(props: Props) {
             >
               {languages.map((lang) => {
                 return (
-                  <option key={lang.filename} value={lang.filename}>
+                  <option key={lang.filename} value={lang.filename} selected={config?.language === lang.filename}>
                     {lang.name.replace(/"/g, '')}
                   </option>
                 )
