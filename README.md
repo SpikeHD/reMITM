@@ -12,7 +12,11 @@
     <img src="https://img.shields.io/github/commit-activity/m/SpikeHD/reMITM.svg" />
   </div>
   
-  <div align="center">Dead-simple MITM redirection program.</div>
+  <div align="center">
+    Dead-simple MITM redirection program.
+    <br />
+    <a href="https://discord.gg/agQ9mRdHMZ">https://discord.gg/agQ9mRdHMZ</a>
+  </div>
 </div>
 
 # Table of Contents
