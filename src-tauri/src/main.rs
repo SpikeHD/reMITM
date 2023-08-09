@@ -1,11 +1,14 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use certificate::cert_path;
+use cli::process_args;
 use config::{default_config, init_config};
 use log::print_info;
 use proxy::set_redirect_server;
 
 mod certificate;
+mod cli;
 mod config;
 mod lang;
 mod log;
@@ -42,6 +45,11 @@ pub fn init() {
 
 #[tauri::command]
 fn install_ca_command(window: tauri::Window) {
+  let crt_path = maybe_generate_ca();
+  certificate::install_ca_files(crt_path.join("cert.crt"), Some(window));
+}
+
+pub fn maybe_generate_ca() -> std::path::PathBuf {
   let crt_path = certificate::cert_path();
 
   // If the cert.crt doesn't exist, generate it
@@ -50,7 +58,7 @@ fn install_ca_command(window: tauri::Window) {
     certificate::generate_ca_files(certificate::cert_path());
   }
 
-  certificate::install_ca_files(crt_path.join("cert.crt"), Some(window));
+  crt_path
 }
 
 #[tauri::command]
@@ -84,6 +92,9 @@ fn main() {
       .redirect_to
       .unwrap_or_else(|| default_config().redirect_to.unwrap()),
   );
+
+  // Parse args with CLAP
+  process_args();
 
   tauri::Builder::default()
     .invoke_handler(tauri::generate_handler![
