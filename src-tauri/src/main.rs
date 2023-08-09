@@ -1,11 +1,11 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use certificate::cert_path;
 use cli::process_args;
 use config::{default_config, init_config};
 use log::print_info;
 use proxy::set_redirect_server;
+use tauri::async_runtime::block_on;
 
 mod certificate;
 mod cli;
@@ -94,7 +94,7 @@ fn main() {
   );
 
   // Parse args with CLAP
-  process_args();
+  block_on(process_args());
 
   tauri::Builder::default()
     .invoke_handler(tauri::generate_handler![

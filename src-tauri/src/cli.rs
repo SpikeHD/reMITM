@@ -1,5 +1,7 @@
 use clap::Parser;
-use tauri::async_runtime::block_on;
+use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::Arc;
+use std::time::Duration;
 
 use crate::{certificate::install_ca_files, maybe_generate_ca, proxy::set_redirect_server, config::{get_config, write_config}, log::print_info, disconnect, connect};
 
@@ -31,7 +33,7 @@ pub struct Args {
   redirect: Option<String>,
 }
 
-pub fn process_args() {
+pub async fn process_args() {
   let args = Args::parse();
 
   if !args.no_gui {
@@ -107,15 +109,20 @@ pub fn process_args() {
 
   crate::proxy::connect_to_proxy();
 
-  block_on(
-    crate::proxy::create_proxy(None)
-  );
+  crate::proxy::create_proxy(None).await;
   
-  // create_proxy starts a tokio task, so we need to block the main thread
-  // until the proxy is closed
+  // Let this thread sleep until ctrl+c is pressed
+  let running = Arc::new(AtomicBool::new(true));
+  let r = running.clone();
+
+  ctrlc::set_handler(move || {
+    r.store(false, Ordering::Relaxed);
+  }).expect("Error setting Ctrl-C handler");
+
+  while running.load(Ordering::Relaxed) {
+    std::thread::sleep(Duration::from_millis(100));
+  }
+
   disconnect();
-
-  print_info("Disconnected".to_string());
-
   std::process::exit(0);
 }
