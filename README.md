@@ -33,8 +33,6 @@
 
 # Introduction
 
-[View an overview here!](https://spikehd.github.io/projects/reMITM)
-
 reMITM was made for one purpose: to redirect requests to other places. While it allows you to log network traffic, this isn't really intended to be a debugger. Rather, it's use comes from it's ease of configuration for simply redirecting network traffic to other places (such as `localhost`, if you are intending on consuming/monitoring the traffic).
 
 <div align="center">
