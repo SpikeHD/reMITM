@@ -1,0 +1,25 @@
+{
+  "language": "Deutsch",
+  "main": {
+    "connected": "Verbunden",
+    "disconnected": "Getrennt",
+    "connecting": "Verbinde...",
+    "redirect_to": "Weiterleiten nach:",
+    "server_address": "Server Adresse...",
+    "port": "Port...",
+    "uris_to_redirect": "URIs zum Weiterleiten...",
+    "enter_new_uri": "Hinzufügen einer neuen URI..."
+  },
+  "config": {
+    "language": "Sprache",
+    "launch_on_startup": "Starte beim Hochfahren",
+    "proxy_port": "Proxy port",
+    "preferred_terminal": "beforzugter terminal",
+    "modify_gsettings": "Ändere GSettings",
+    "use_environment_variables": "Benutze Umgebungsvariablen",
+    "dot_profile": ".profile entsprechend"
+  },
+  "logs": {
+    "no_requests": "Keine Antwort bis jetzt..."
+  }
+}
