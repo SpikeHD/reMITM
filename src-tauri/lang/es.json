@@ -1,0 +1,25 @@
+{
+  "language": "Español",
+  "main": {
+    "connected": "Conectado",
+    "disconnected": "Desconectado",
+    "connecting": "Conectando...",
+    "redirect_to": "Redireccionar a:",
+    "server_address": "Dirección del servidor...",
+    "port": "Puerto...",
+    "uris_to_redirect": "URIs para redireccionar...",
+    "enter_new_uri": "Agrega una nueva URI..."
+  },
+  "config": {
+    "language": "Idioma",
+    "launch_on_startup": "Iniciar en el arranque",
+    "proxy_port": "Puerto del proxy",
+    "preferred_terminal": "Terminal preferida",
+    "modify_gsettings": "Modificar GSettings",
+    "use_environment_variables": "Usar variables de entorno",
+    "dot_profile": "Equivalente de .profile"
+  },
+  "logs": {
+    "no_requests": "No hay peticiones por ahora..."
+  }
+}
