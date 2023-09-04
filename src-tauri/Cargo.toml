@@ -1,7 +1,7 @@
 [package]
 name = "app"
 version = "0.5.0"
-description = "A Tauri App"
+description = "Selective MITM proxy"
 authors = ["you"]
 license = ""
 repository = ""
