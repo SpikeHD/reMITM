@@ -41,11 +41,20 @@ jobs:
       - name: Install deps and build
         run: yarn && yarn tauri build
 
+      - name: Zip build
+        run: 7z a -tzip remitm_windows.zip src-tauri/target/release/remitm.exe src-tauri/target/release/lang/
+
       - name: Upload build
         uses: actions/upload-artifact@v3
         with:
-          name: remitm_windows
-          path: src-tauri/target/release/remitm.exe
+          name: remitm_windows_portable
+          path: remitm_windows.zip
+
+      - name: Upload bundle
+        uses: actions/upload-artifact@v3
+        with:
+          name: remitm_windows_bundle
+          path: src-tauri/target/release/bundle/msi/*.msi
 
   build-ubuntu:
     runs-on: ubuntu-20.04
@@ -69,11 +78,20 @@ jobs:
       - name: Install deps and build
         run: HASH=$(git rev-parse --short HEAD) yarn && yarn tauri build
 
+      - name: compress build
+        run: tar -czvf remitm_linux.tar.gz src-tauri/target/release/remitm src-tauri/target/release/lang/
+
       - name: Upload build
         uses: actions/upload-artifact@v3
         with:
-          name: remitm_linux
-          path: src-tauri/target/release/remitm
+          name: remitm_linux_portable
+          path: remitm_linux.tar.gz
+
+      - name: Upload bundle
+        uses: actions/upload-artifact@v3
+        with:
+          name: remitm_linux_bundle
+          path: src-tauri/target/release/bundle/deb/remitm.deb
 
   build-mac:
     runs-on: macos-latest
@@ -101,4 +119,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: remitm_mac
-          path: src-tauri/target/release/remitm
+          path: src-tauri/target/release/bundle/dmg/remitm.dmg
