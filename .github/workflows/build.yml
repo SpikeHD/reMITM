@@ -91,7 +91,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: remitm_linux_bundle
-          path: src-tauri/target/release/bundle/deb/remitm.deb
+          path: src-tauri/target/release/bundle/deb/*.deb
 
   build-mac:
     runs-on: macos-latest
@@ -119,4 +119,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: remitm_mac
-          path: src-tauri/target/release/bundle/dmg/remitm.dmg
+          path: src-tauri/target/release/bundle/dmg/*.dmg
