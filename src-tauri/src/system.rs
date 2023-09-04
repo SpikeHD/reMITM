@@ -20,8 +20,6 @@ pub fn reopen_as_admin() {
 pub fn _reopen_as_admin() {
   let install = std::env::current_exe().unwrap();
 
-  print_info(format!("Opening as root: {}", install.to_str().unwrap()));
-
   Command::new("sudo")
     .arg(install.to_str().unwrap())
     .spawn()
@@ -33,8 +31,6 @@ pub fn _reopen_as_admin() {
 #[cfg(target_os = "macos")]
 pub fn _reopen_as_admin() {
   let install = std::env::current_exe().unwrap();
-
-  print_info(format!("Opening as root: {}", install.to_str().unwrap()));
 
   Command::new("sudo")
     .arg(install.to_str().unwrap())
