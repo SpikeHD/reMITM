@@ -5,7 +5,8 @@ use std::time::Duration;
 
 use crate::{
   certificate::install_ca_files,
-  config::{get_config, write_config}, disconnect,
+  config::{get_config, write_config},
+  disconnect,
   log::print_info,
   maybe_generate_ca,
   proxy::set_redirect_server,

@@ -1,7 +1,5 @@
 use std::process::{exit, Command};
 
-
-
 #[cfg(windows)]
 pub fn reopen_as_admin() {
   let install = std::env::current_exe().unwrap();
