@@ -3,7 +3,13 @@ use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
 use std::time::Duration;
 
-use crate::{certificate::install_ca_files, maybe_generate_ca, proxy::set_redirect_server, config::{get_config, write_config}, log::print_info, disconnect, connect};
+use crate::{
+  certificate::install_ca_files,
+  config::{get_config, write_config}, disconnect,
+  log::print_info,
+  maybe_generate_ca,
+  proxy::set_redirect_server,
+};
 
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
@@ -61,7 +67,7 @@ pub async fn process_args() {
     print_info(format!("Proxy port set to custom: {}", args.port));
   }
 
-  if args.redirect_to != "" {
+  if !args.redirect_to.is_empty() {
     print_info(format!("Redirecting to: {}", args.redirect_to));
     set_redirect_server(args.redirect_to);
   }
@@ -73,18 +79,18 @@ pub async fn process_args() {
 
     let file_contents = std::fs::read_to_string(file).unwrap_or(String::new());
 
-    if file_contents == "" {
+    if file_contents.is_empty() {
       print_info("File is empty".to_string());
     } else {
-      let lines = file_contents.split("\n");
+      let lines = file_contents.split('\n');
       let collected: Vec<String> = lines.map(|s| s.to_string()).collect();
 
       print_info(format!("Redirecting {} URIs", &collected.len()));
 
       let mut config = get_config();
-  
+
       config.urls_to_redirect = Some(collected);
-  
+
       // Save the config
       write_config(config);
     }
@@ -93,7 +99,7 @@ pub async fn process_args() {
   // This is processed after the file because it should take precedence
   if args.redirect.is_some() {
     let redirect = args.redirect.unwrap();
-    let lines = redirect.split(",");
+    let lines = redirect.split(',');
 
     print_info(format!("Redirecting the following URIs: {}", redirect));
 
@@ -110,14 +116,15 @@ pub async fn process_args() {
   crate::proxy::connect_to_proxy();
 
   crate::proxy::create_proxy(None).await;
-  
+
   // Let this thread sleep until ctrl+c is pressed
   let running = Arc::new(AtomicBool::new(true));
   let r = running.clone();
 
   ctrlc::set_handler(move || {
     r.store(false, Ordering::Relaxed);
-  }).expect("Error setting Ctrl-C handler");
+  })
+  .expect("Error setting Ctrl-C handler");
 
   while running.load(Ordering::Relaxed) {
     std::thread::sleep(Duration::from_millis(100));

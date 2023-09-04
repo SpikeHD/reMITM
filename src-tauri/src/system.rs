@@ -1,12 +1,10 @@
 use std::process::{exit, Command};
 
-use crate::log::print_info;
+
 
 #[cfg(windows)]
 pub fn reopen_as_admin() {
   let install = std::env::current_exe().unwrap();
-
-  print_info(format!("Opening as admin: {}", install.to_str().unwrap()));
 
   Command::new("powershell.exe")
     .arg("powershell")

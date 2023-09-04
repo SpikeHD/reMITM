@@ -31,7 +31,7 @@ pub fn get_language(
 
       let lang_file = app
         .path_resolver()
-        .resolve_resource(PathBuf::from(format!("lang/{}", language)))
+        .resolve_resource(PathBuf::from(format!("lang/{}.json", language)))
         .unwrap();
       let mut file = std::fs::File::open(lang_file).unwrap_or_else(|_| {
         print_warning(format!(
