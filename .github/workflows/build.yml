@@ -71,13 +71,8 @@ jobs:
         if: matrix.platform == 'macos-latest'
         run: rustup target add aarch64-apple-darwin
 
-      - name: Build updater
-        run: pnpm build:updater
-        env:
-          RUSTFLAGS: -Awarnings
-
       - name: Install dependencies
-        run: pnpm install && pnpm shupdate
+        run: pnpm install
           
       - name: Build
         # Include seperate targets for MacOS since it needs to build for both aarch64 and x86_64
