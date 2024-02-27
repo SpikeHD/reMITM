@@ -55,7 +55,7 @@
         "providerShortName": null,
         "signingIdentity": null
       },
-      "resources": ["lang/*.json"],
+      "resources": [],
       "shortDescription": "",
       "targets": "all",
       "windows": {

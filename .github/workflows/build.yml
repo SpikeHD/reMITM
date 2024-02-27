@@ -42,7 +42,7 @@ jobs:
         run: yarn && yarn tauri build
 
       - name: Zip build
-        run: 7z a -tzip remitm_windows.zip src-tauri/target/release/remitm.exe src-tauri/target/release/lang/
+        run: 7z a -tzip remitm_windows.zip src-tauri/target/release/remitm.exe
 
       - name: Upload build
         uses: actions/upload-artifact@v3
@@ -79,7 +79,7 @@ jobs:
         run: HASH=$(git rev-parse --short HEAD) yarn && yarn tauri build
 
       - name: compress build
-        run: tar -czvf remitm_linux.tar.gz src-tauri/target/release/remitm src-tauri/target/release/lang/
+        run: tar -czvf remitm_linux.tar.gz src-tauri/target/release/remitm
 
       - name: Upload build
         uses: actions/upload-artifact@v3
