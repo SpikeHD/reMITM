@@ -18,7 +18,6 @@ pub struct Lang {
 
 #[tauri::command]
 pub fn get_language(
-  app: tauri::AppHandle,
   force_reload: Option<bool>,
   lang: Option<String>,
 ) -> String {
