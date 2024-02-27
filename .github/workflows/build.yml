@@ -18,105 +18,134 @@ concurrency:
   group: ${{ github.ref }}-${{ github.workflow }}
   cancel-in-progress: true
 
+env:
+  CARGO_INCREMENTAL: 0
+
 jobs:
-  build-win:
-    runs-on: windows-latest
+  build:
+    runs-on: ${{ matrix.platform }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [windows-latest, ubuntu-20.04, macos-latest]
+
     steps:
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8.6.7
+
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - name: setup node
-        uses: actions/setup-node@v1
+      - name: Setup node
+        uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 18
 
-      - name: Install Rust
-        uses: actions-rs/toolchain@v1
+      - uses: actions/cache@v3
         with:
-          toolchain: stable
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            src-tauri/target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
-      - name: Set HASH env variable as the latest git hash
-        run: $HASH=$(git rev-parse --short HEAD)
+      - name: (Linux) Install dependencies
+        if: matrix.platform == 'ubuntu-20.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.0-dev \
+            build-essential \
+            curl \
+            wget \
+            libssl-dev \
+            libgtk-3-dev \
+            libayatana-appindicator3-dev \
+            librsvg2-dev
 
-      - name: Install deps and build
-        run: yarn && yarn tauri build
+      - name: (MacOS) Install MacOS universal target
+        if: matrix.platform == 'macos-latest'
+        run: rustup target add aarch64-apple-darwin
 
-      - name: Zip build
-        run: 7z a -tzip remitm_windows.zip src-tauri/target/release/remitm.exe
+      - name: Build updater
+        run: pnpm build:updater
+        env:
+          RUSTFLAGS: -Awarnings
 
-      - name: Upload build
-        uses: actions/upload-artifact@v3
+      - name: Install dependencies
+        run: pnpm install && pnpm shupdate
+          
+      - name: Build
+        # Include seperate targets for MacOS since it needs to build for both aarch64 and x86_64
+        run: pnpm tauri build ${{ matrix.platform == 'macos-latest' && '--target aarch64-apple-darwin && pnpm tauri build --target x86_64-apple-darwin' || '' }}
+        env:
+          RUSTFLAGS: -Awarnings
+
+      - name: Create empty config.json
+        run: cd src-tauri/target/release && echo {} > config.json
+        
+      - name: (Windows) Compress build
+        if: matrix.platform == 'windows-latest'
+        run: 7z a -tzip remitm.zip 
+          src-tauri/target/release/remitm.exe
+
+      - name: (Linux) Compress build
+        if: matrix.platform == 'ubuntu-20.04'
+        run: cd src-tauri/target/release && tar -czvf remitm.tar.gz remitm 
+
+      # Windows portable
+      - name: (Windows) Upload portable
+        if: matrix.platform == 'windows-latest'
+        uses: actions/upload-artifact@v4
         with:
-          name: remitm_windows_portable
-          path: remitm_windows.zip
+          name: remitm_win64_portable
+          path: remitm.zip
 
-      - name: Upload bundle
-        uses: actions/upload-artifact@v3
+      # Windows MSI
+      - name: (Windows) Upload .msi
+        if: matrix.platform == 'windows-latest'
+        uses: actions/upload-artifact@v4
         with:
-          name: remitm_windows_bundle
+          name: remitm_win64_msi
           path: src-tauri/target/release/bundle/msi/*.msi
 
-  build-ubuntu:
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: setup node
-        uses: actions/setup-node@v1
+      # Ubuntu portable
+      - name: (Linux) Upload portable
+        if: matrix.platform == 'ubuntu-20.04'
+        uses: actions/upload-artifact@v4
         with:
-          node-version: 16
+          name: remitm_amd64_portable
+          path: src-tauri/target/release/remitm.tar.gz
 
-      - name: Install Rust
-        uses: actions-rs/toolchain@v1
+      # Ubuntu deb
+      - name: (Linux) Upload .deb
+        if: matrix.platform == 'ubuntu-20.04'
+        uses: actions/upload-artifact@v4
         with:
-          toolchain: stable
-
-      - name: Install libraries
-        run: sudo apt install libwebkit2gtk-4.0-dev build-essential curl wget libssl-dev libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev
-
-      - name: Install deps and build
-        run: HASH=$(git rev-parse --short HEAD) yarn && yarn tauri build
-
-      - name: compress build
-        run: tar -czvf remitm_linux.tar.gz src-tauri/target/release/remitm
-
-      - name: Upload build
-        uses: actions/upload-artifact@v3
-        with:
-          name: remitm_linux_portable
-          path: remitm_linux.tar.gz
-
-      - name: Upload bundle
-        uses: actions/upload-artifact@v3
-        with:
-          name: remitm_linux_bundle
+          name: remitm_amd64_deb
           path: src-tauri/target/release/bundle/deb/*.deb
 
-  build-mac:
-    runs-on: macos-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: setup node
-        uses: actions/setup-node@v1
+      - name: (Linux) Upload .appimage
+        if: matrix.platform == 'ubuntu-20.04'
+        uses: actions/upload-artifact@v4
         with:
-          node-version: 16
+          name: remitm_amd64_appimage
+          path: src-tauri/target/release/bundle/appimage/*.AppImage
 
-      - name: Install Rust
-        uses: actions-rs/toolchain@v1
+      - name: (MacOS) Upload x86 .dmg
+        if: matrix.platform == 'macos-latest'
+        uses: actions/upload-artifact@v4
         with:
-          toolchain: stable
-
-      - name: Set HASH env variable as the latest git hash
-        run: export HASH=$(git rev-parse --short HEAD)
-
-      - name: Install deps and build
-        run: yarn && yarn tauri build
-
-      - name: Upload build
-        uses: actions/upload-artifact@v3
+          name: remitm_macos_x86-64_dmg
+          path: src-tauri/target/x86_64-apple-darwin/release/bundle/dmg/*.dmg
+      
+      - name: (MacOS) Upload ARM .dmg
+        if: matrix.platform == 'macos-latest'
+        uses: actions/upload-artifact@v4
         with:
-          name: remitm_mac
-          path: src-tauri/target/release/bundle/dmg/*.dmg
+          name: remitm_macos_arm_dmg
+          path: src-tauri/target/aarch64-apple-darwin/release/bundle/dmg/*.dmg
