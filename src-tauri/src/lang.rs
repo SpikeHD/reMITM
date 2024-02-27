@@ -1,11 +1,14 @@
-use std::{io::Read, path::PathBuf};
+use include_dir::{Dir, include_dir};
+use serde_json::Value;
 
 use crate::{
   config::get_config,
   log::{print_info, print_warning},
 };
 
+static LANG_DIR: Dir<'_> = include_dir!("lang");
 pub static mut LANG: Option<String> = None;
+
 
 #[derive(serde::Serialize, serde::Deserialize)]
 pub struct Lang {
@@ -29,36 +32,24 @@ pub fn get_language(
       // Load the file
       print_info(format!("Loading language file: {}", language));
 
-      let lang_file = app
-        .path_resolver()
-        .resolve_resource(PathBuf::from(format!("lang/{}.json", language)))
-        .unwrap();
-      let mut file = std::fs::File::open(lang_file).unwrap_or_else(|_| {
-        print_warning(format!(
-          "Error loading language file: {}, falling back to english.",
-          language
-        ));
+      if let Some(lang_file) = LANG_DIR.get_file(&format!("{}", language)) {
+        print_info(format!("Loaded language file: {}", language));
+        
+        let contents = lang_file.contents_utf8().unwrap_or_else(|| {
+          print_warning(format!("Failed to read language file: {}", language));
+          "{}"
+        });
 
-        // Fallback to english
-        std::fs::File::open(
-          app
-            .path_resolver()
-            .resolve_resource(PathBuf::from("lang/en.json"))
-            .unwrap(),
-        )
-        .unwrap()
-      });
-      let mut contents = String::new();
-
-      file.read_to_string(&mut contents).unwrap();
-
-      // Cache the file
-      if LANG.is_none() || force_reload.unwrap_or(false) {
+        // Cache the file
         print_info("Reloading language cache".to_string());
-        LANG = Some(contents.clone());
+        LANG = Some(contents.to_string());
+
+        return contents.to_string();
+      } else {
+        print_warning(format!("Failed to load language file: {}", language));
       }
 
-      return contents;
+      return String::from("{}");
     }
 
     LANG.clone().unwrap()
@@ -66,27 +57,27 @@ pub fn get_language(
 }
 
 #[tauri::command]
-pub fn language_list(app: tauri::AppHandle) -> Vec<Lang> {
+pub fn language_list() -> Vec<Lang> {
   // Read the "lang" dir and return the list
   let mut langs: Vec<Lang> = vec![];
-  let files = app
-    .path_resolver()
-    .resolve_resource(PathBuf::from("lang/"))
-    .unwrap();
-  let file_list = std::fs::read_dir(files).unwrap();
+  let files = LANG_DIR.files();
 
   // Read each file and create a lang object from the "language" json key within it
-  for file in file_list {
-    let file_entry = file.unwrap();
-    let file_path = &file_entry.path();
+  for file in files {
+    if !file.path().to_str().unwrap_or("").ends_with(".json") {
+      continue;
+    }
+    
+    let contents = file.contents_utf8().unwrap_or_else(|| {
+      print_warning(format!("Failed to read language file: {}", file.path().to_str().unwrap_or("")));
+      "{}"
+    });
+    let json: Value = serde_json::from_str(&contents).unwrap_or_else(|_| {
+      print_warning(format!("Failed to parse language file: {}", file.path().to_str().unwrap_or("")));
+      serde_json::from_str("{}").unwrap()
+    });
 
-    let mut file = std::fs::File::open(file_path).unwrap();
-    let mut contents = String::new();
-
-    file.read_to_string(&mut contents).unwrap();
-
-    let json: serde_json::Value = serde_json::from_str(&contents).unwrap();
-    let filename = file_path.file_name().unwrap();
+    let filename = file.path().file_name().unwrap();
 
     let lang = Lang {
       name: json["language"].to_string(),
